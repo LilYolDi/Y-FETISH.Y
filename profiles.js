@@ -1,154 +1,316 @@
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-    const normalProfiles = document.getElementById('normalProfiles');
-    const count = document.getElementById('count');
-    const citySelect = document.getElementById('city');
-    const countrySelect = document.getElementById('country');
-    const goalSelect = document.getElementById('goal');
-    const searchButton = document.getElementById('searchButton');
-    const resetButton = document.getElementById('resetButton');
-    const empty = document.getElementById('empty');
+    const country = document.getElementById("country");
+    const city = document.getElementById("city");
+    const goal = document.getElementById("goal");
 
-    let ads = [];
+    const searchButton = document.getElementById("searchButton");
+    const resetButton = document.getElementById("resetButton");
 
-    async function loadAds() {
-        try {
-            const response = await fetch('/api/ads');
+    const count = document.getElementById("count");
+    const empty = document.getElementById("empty");
 
-            if (!response.ok) {
-                throw new Error('Не удалось загрузить объявления');
-            }
+    const allCards = document.querySelectorAll(".profile-card");
 
-            ads = await response.json();
+    const cities = {
 
-            updateCities(ads);
-            renderAds(ads);
+        "Украина": [
+            "Киев",
+            "Одесса",
+            "Львов",
+            "Ивано-Франковск",
+            "Днепр",
+            "Харьков",
+            "Запорожье"
+        ],
 
-        } catch (error) {
-            console.error('Ошибка загрузки объявлений:', error);
-            count.textContent = '0';
-            normalProfiles.innerHTML = '';
-            empty.classList.remove('hidden');
-        }
-    }
+        "Россия": [
+            "Москва",
+            "Санкт-Петербург",
+            "Казань",
+            "Екатеринбург",
+            "Новосибирск"
+        ]
 
-    function renderAds(list) {
+    };
 
-        normalProfiles.innerHTML = '';
 
-        count.textContent = list.length;
+    // =========================
+    // ГОРОДА
+    // =========================
 
-        if (list.length === 0) {
-            empty.classList.remove('hidden');
+    function updateCities() {
+
+        const selectedCountry = country.value;
+
+        city.innerHTML = `
+            <option value="all">
+                Все города
+            </option>
+        `;
+
+        if (selectedCountry === "all") {
+
+            const allCities = [
+                ...cities["Украина"],
+                ...cities["Россия"]
+            ];
+
+            allCities.forEach(function (cityName) {
+
+                const option = document.createElement("option");
+
+                option.value = cityName;
+                option.textContent = cityName;
+
+                city.appendChild(option);
+
+            });
+
             return;
         }
 
-        empty.classList.add('hidden');
 
-        list.forEach(function (ad) {
+        if (cities[selectedCountry]) {
 
-            const card = document.createElement('div');
+            cities[selectedCountry].forEach(function (cityName) {
 
-            card.className = 'profile-card';
+                const option = document.createElement("option");
 
-            card.dataset.country = ad.country || '';
-            card.dataset.city = ad.city || '';
-            card.dataset.goal = ad.goal || '';
-            card.dataset.vip = 'false';
+                option.value = cityName;
+                option.textContent = cityName;
 
-            const image = document.createElement('img');
+                city.appendChild(option);
 
-            image.src = ad.photo || 'images/1.jpg';
-            image.alt = ad.title || 'Анкета';
+            });
 
-            image.onerror = function () {
-                this.src = 'images/1.jpg';
-            };
-
-            const info = document.createElement('div');
-
-            info.className = 'profile-info';
-
-            const title = document.createElement('h3');
-
-            title.textContent = ad.title  ad.city  'Без имени';
-
-            const description = document.createElement('p');
-
-            description.textContent =
-                ad.description || 'Описание анкеты';
-
-            const button = document.createElement('button');
-
-            button.type = 'button';
-            button.textContent = 'Подробнее';
-
-            info.appendChild(title);
-            info.appendChild(description);
-            info.appendChild(button);
-
-            card.appendChild(image);
-            card.appendChild(info);
-
-            normalProfiles.appendChild(card);
-        });
-    }
-
-    function updateCities(list) {
-
-        if (!citySelect) {
-            return;
         }
 
-        const currentCity = citySelect.value;
-
-        citySelect.innerHTML = '';
-
-        const allOption = document.createElement('option');
-
-        allOption.value = 'all';
-        allOption.textContent = 'Все города';
-
-        citySelect.appendChild(allOption);
-
-        const cities = [...new Set(
-            list
-                .map(ad => ad.city)
-                .filter(city => city)
-        )];
-
-        cities.sort();
-
-        cities.forEach(function (city) {
-
-            const option = document.createElement('option');
-
-            option.value = city;
-            option.textContent = city;
-
-            citySelect.appendChild(option);
-        });
-
-        if (cities.includes(currentCity)) {
-            citySelect.value = currentCity;
-        }
     }
 
-    function filterAds() {
 
-        const country =
-            countrySelect ? countrySelect.value : 'all';
+    // При выборе страны меняем города
 
-        const city =
-            citySelect ? citySelect.value : 'all';
+    country.addEventListener("change", function () {
 
-        const goal =
-            goalSelect ? goalSelect.value : 'all';
+        updateCities();
 
-        const filtered = ads.filter(function (ad) {
+        city.value = "all";
+
+    });
+
+
+    // =========================
+    // ПОИСК
+    // =========================
+
+    function searchProfiles() {
+
+        const selectedCountry = country.value;
+        const selectedCity = city.value;
+        const selectedGoal = goal.value;
+
+        let found = 0;
+
+
+        allCards.forEach(function (card) {
+
+            const cardCountry =
+                card.dataset.country;
+
+            const cardCity =
+                card.dataset.city;
+
+            const cardGoal =
+                card.dataset.goal;
+
 
             const countryMatch =
-                country === 'all' ||
-                ad.country === country;
+                selectedCountry === "all" ||
+                cardCountry === selectedCountry;
+
 
             const cityMatch =
+                selectedCity === "all" ||
+                cardCity === selectedCity;
+
+
+            const goalMatch =
+                selectedGoal === "all" ||
+                cardGoal === selectedGoal;
+
+
+            if (
+                countryMatch &&
+                cityMatch &&
+                goalMatch
+            ) {
+
+                card.style.display = "";
+
+                found++;
+
+            } else {
+
+                card.style.display = "none";
+
+            }
+
+        });
+
+
+        count.textContent = found;
+
+
+        if (found === 0) {
+
+            empty.classList.remove("hidden");
+
+        } else {
+
+            empty.classList.add("hidden");
+
+        }
+
+    }
+
+
+    // =========================
+    // КНОПКА НАЙТИ
+    // =========================
+
+    searchButton.addEventListener("click", function () {
+
+        searchProfiles();
+
+    });
+
+
+    // =========================
+    // СБРОС
+    // =========================
+
+    resetButton.addEventListener("click", function () {
+
+        country.value = "all";
+
+        updateCities();
+
+        city.value = "all";
+
+        goal.value = "all";
+
+        allCards.forEach(function (card) {
+
+            card.style.display = "";
+
+        });
+
+        count.textContent = allCards.length;
+
+        empty.
+
+
+classList.add("hidden");
+
+    });
+
+
+    // =========================
+    // МЕНЮ
+    // =========================
+
+    const menuButton =
+        document.getElementById("menuButton");
+
+    const closeMenu =
+        document.getElementById("closeMenu");
+
+    const sideMenu =
+        document.getElementById("sideMenu");
+
+    const menuOverlay =
+        document.getElementById("menuOverlay");
+
+
+    function openMenu() {
+
+        sideMenu.classList.add("active");
+
+        menuOverlay.classList.add("active");
+
+    }
+
+
+    function closeSideMenu() {
+
+        sideMenu.classList.remove("active");
+
+        menuOverlay.classList.remove("active");
+
+    }
+
+
+    if (menuButton) {
+
+        menuButton.addEventListener(
+            "click",
+            openMenu
+        );
+
+    }
+
+
+    if (closeMenu) {
+
+        closeMenu.addEventListener(
+            "click",
+            closeSideMenu
+        );
+
+    }
+
+
+    if (menuOverlay) {
+
+        menuOverlay.addEventListener(
+            "click",
+            closeSideMenu
+        );
+
+    }
+
+
+    // =========================
+    // ВЫХОД
+    // =========================
+
+    const logout =
+        document.getElementById("logout");
+
+    if (logout) {
+
+        logout.addEventListener("click", function () {
+
+            localStorage.removeItem("telegramUser");
+
+            window.location.href =
+                "./index.html";
+
+        });
+
+    }
+
+
+    // =========================
+    // НАЧАЛЬНАЯ ЗАГРУЗКА
+    // =========================
+
+    updateCities();
+
+    count.textContent = allCards.length;
+
+});
+
+
+
