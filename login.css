@@ -1,0 +1,148 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at top,
+            #171717 0,
+            #080808 45%,
+            #050505 100%
+        );
+
+    color: #ffffff;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+}
+
+.login-page {
+    min-height: 100vh;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+}
+
+.login-card {
+    width: min(420px, 100%);
+
+    padding: 38px 30px;
+
+    text-align: center;
+
+    background: #0c0c0c;
+
+    border: 1px solid #292929;
+    border-radius: 10px;
+
+    box-shadow:
+        0 25px 70px rgba(
+            0,
+            0,
+            0,
+            0.55
+        );
+}
+
+.login-logo {
+    display: inline-block;
+
+    margin-bottom: 30px;
+
+    color: #ffffff;
+
+    text-decoration: none;
+
+    font-size: 32px;
+    font-weight: 900;
+}
+
+.login-logo span {
+    color: #e50914;
+}
+
+.login-card h1 {
+    margin: 0 0 10px;
+
+    font-size: 25px;
+}
+
+.login-description {
+    margin: 0 auto 30px;
+
+    max-width: 320px;
+
+    color: #777777;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+.telegram-login {
+    min-height: 50px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.telegram-loading {
+    color: #666666;
+
+    font-size: 12px;
+}
+
+.login-message {
+    min-height: 25px;
+
+    margin-top: 15px;
+
+    color: #e50914;
+
+    font-size: 13px;
+}
+
+.back-to-site {
+    display: inline-block;
+
+    margin-top: 25px;
+
+    color: #666666;
+
+    text-decoration: none;
+
+    font-size: 12px;
+}
+
+.back-to-site:hover {
+    color: #e50914;
+}
+
+@media (max-width: 500px) {
+
+    .login-page {
+        padding: 15px;
+    }
+
+    .login-card {
+        padding: 30px 20px;
+    }
+}

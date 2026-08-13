@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Опубликовать объявление</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            font-size: 17px;
+            cursor: pointer;
+            border: 0;
+            border-radius: 8px;
+            background: #000;
+            color: white;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+        }
+
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #preview {
+            display: none;
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            margin-top: 15px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Опубликовать объявление</h1>
+
+    <form id="adForm">
+
+        <label for="title">Имя / заголовок</label>
+
+        <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Введите имя"
+            required
+        >
+
+
+        <label for="description">Описание</label>
+
+        <textarea
+            id="description"
+            name="description"
+            placeholder="Расскажите о себе..."
+            required
+        ></textarea>
+
+
+        <label for="city">Город</label>
+
+        <input
+            type="text"
+            id="city"
+            name="city"
+            placeholder="Например: Ивано-Франковск"
+            required
+        >
+
+
+        <label for="photo">Фотография</label>
+
+        <input
+            type="file"
+            id="photo"
+            name="photo"
+            accept="image/*"
+        >
+
+        <img id="preview" alt="Предпросмотр фотографии">
+
+
+        <button type="submit" id="submitButton">
+            Опубликовать
+        </button>
+
+    </form>
+
+
+    <div id="message"></div>
+
+
+    <script>
+        const form = document.getElementById('adForm');
+
+        const button =
+            document.getElementById('submitButton');
+
+        const message =
+            document.getElementById('message');
+
+        const photoInput =
+            document.getElementById('photo');
+
+        const preview =
+            document.getElementById('preview');
+
+
+        // Предпросмотр фотографии
+        photoInput.addEventListener('change', function () {
+
+            const file = photoInput.files[0];
+
+            if (!file) {
+                preview.style.display = 'none';
+                preview.src = '';
+                return;
+            }
+
+            preview.src = URL.createObjectURL(file);
+            preview.style.display = 'block';
+        });
+
+
+        // Публикация
+        form.addEventListener('submit', async function (event) {
+
+            event.preventDefault();
+
+            button.disabled = true;
+            button.textContent = 'Публикуем...';
+
+            message.textContent = '';
+
+
+            const formData = new FormData();
+
+            formData.append(
+                'title',
+                document.getElementById('title').value
+            );
+
+            formData.append(
+                'description',
+                document.getElementById('description').value
+            );
+
+            formData.append(
+                'city',
+				
+document.getElementById('city').value
+            );
+
+
+            if (photoInput.files[0]) {
+
+                formData.append(
+                    'photo',
+                    photoInput.files[0]
+                );
+
+            }
+
+
+            try {
+
+                const response = await fetch('/api/ads', {
+
+                    method: 'POST',
+
+                    body: formData
+
+                });
+
+
+                const result =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.error ||
+                        'Ошибка публикации'
+                    );
+
+                }
+
+
+                message.textContent =
+                    'Объявление опубликовано!';
+
+
+                form.reset();
+
+                preview.style.display = 'none';
+                preview.src = '';
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.textContent =
+                    'Ошибка: ' + error.message;
+
+            } finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    'Опубликовать';
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
