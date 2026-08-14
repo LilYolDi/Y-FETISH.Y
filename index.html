@@ -3,25 +3,885 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Y-New</title>
-    <link rel="stylesheet" href="/index.css">
+
+    <title>Y-New — Анкеты</title>
+
+    <link rel="stylesheet" href="./profiles.css">
+
+    <style>
+        /* СЕТКА АНКЕТ */
+
+        .profiles {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 20px !important;
+            width: 100% !important;
+            box-sizing: border-box;
+        }
+
+        .profile-card {
+            width: 100% !important;
+            min-width: 0 !important;
+            box-sizing: border-box;
+        }
+
+        .profile-card img {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Планшет */
+
+        @media (max-width: 1000px) {
+            .profiles {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+            }
+        }
+
+        /* Телефон */
+
+        @media (max-width: 700px) {
+            .profiles {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .profiles {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </head>
-       <link rel="stylesheet" href="./index.css">
-       <script src="./index.js" defer></script>
+
 <body>
 
-    <div class="start-page">
-        <div class="start-logo">
-            <span>Y</span>-New
-        </div>
+<header class="header">
 
-        <p>Знакомства и анкеты</p>
-
-        <a href="profiles.html" class="start-button">
-            Войти на сайт
-        </a>
+    <div class="logo">
+        <span style="color:red;">Y</span><span style="color:white;">-FETISH</span>
     </div>
 
-    <script src="/index.js" defer></script>
+    <div class="header-right">
+
+        <div id="account" class="account">
+            <a href="./register/index.html" class="login-button">
+                Войти через Telegram
+            </a>
+        </div>
+
+        <button
+            id="menuButton"
+            class="menu-button"
+            type="button"
+            aria-label="Открыть меню"
+        >
+            ☰
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- БОКОВОЕ МЕНЮ -->
+
+<aside id="sideMenu" class="side-menu">
+
+    <button
+        id="closeMenu"
+        class="close-menu"
+        type="button"
+        aria-label="Закрыть меню"
+    >
+        ×
+    </button>
+
+
+    <div class="site-logo">
+    <div class="logo">
+        <span style="color:red;">Y</span><span style="color:white;">-FETISH</span>
+    </div>
+    </div>
+
+    <nav class="menu-links">
+
+        <a href="home/index.html">
+            Главная
+        </a>
+
+        <a href="./profiles.html">
+            Все анкеты
+        </a>
+
+        <a href="./publish.html">
+            Создать анкету
+        </a>
+
+
+    </nav>
+
+    <button
+        id="logout"
+        class="logout-button"
+        type="button"
+    >
+        Выйти
+    </button>
+
+</aside>
+
+
+<div
+    id="menuOverlay"
+    class="menu-overlay"
+></div>
+
+
+<main class="main">
+
+    <!-- ЗАГОЛОВОК -->
+
+    <section class="top-section">
+
+        <div>
+
+            <h1>
+                Анкеты
+            </h1>
+
+            <p class="subtitle">
+                Найдите человека по стране, городу
+                и цели знакомства.
+            </p>
+
+        </div>
+
+        <a
+            href="./publish.html"
+            class="create-button"
+        >
+            + Создать анкету
+        </a>
+
+    </section>
+
+
+    <!-- ФИЛЬТРЫ -->
+
+    <section class="filters">
+
+        <!-- СТРАНА -->
+
+        <div class="filter">
+
+            <label for="country">
+                Страна
+            </label>
+
+            <select id="country">
+
+                <option value="all">
+                    Все страны
+                </option>
+
+                <option value="Украина">
+                    Украина
+                </option>
+
+                <option value="Россия">
+                    Россия
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ГОРОД -->
+
+        <div class="filter">
+
+            <label for="city">
+                Город
+            </label>
+
+            <select id="city">
+
+                <option value="all">
+                    Все города
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ЦЕЛЬ -->
+		
+<div class="filter">
+
+            <label for="goal">
+                Цель знакомства
+            </label>
+
+            <select id="goal">
+
+                <option value="all">
+                    Все цели
+                </option>
+
+                <option value="Госпожа">
+                    Госпожа
+                </option>
+
+                <option value="Раб">
+                    Раб
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- ПОИСК -->
+
+        <button
+            id="searchButton"
+            class="search-button"
+            type="button"
+        >
+            Найти
+        </button>
+
+    </section>
+
+
+    <!-- РЕЗУЛЬТАТЫ -->
+
+    <div class="results-header">
+
+        <div>
+            Найдено:
+            <strong id="count">0</strong>
+        </div>
+
+        <button
+            id="resetButton"
+            class="reset-button"
+            type="button"
+        >
+            Сбросить
+        </button>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- VIP АНКЕТЫ -->
+    <!-- ========================= -->
+
+    <div class="vip-title">
+        ⭐️ VIP Анкеты
+    </div>
+
+
+    <div
+        id="vipProfiles"
+        class="profiles"
+    >
+
+
+        <!-- VIP 1 -->
+
+        <div
+            class="profile-card"
+            data-country="Россия"
+            data-city="Москва"
+            data-goal="Госпожа"
+            data-vip="true"
+        >
+
+            <img
+                src="images/1.jpg"
+                alt="Анкета"
+            >
+
+            <div class="profile-info">
+
+                <h3>
+                    Москва
+                </h3>
+
+                <p>
+                    Ищу интересных людей для общения и знакомств.
+                </p>
+
+                <button type="button">
+                    Подробнее
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- VIP 2 -->
+
+        <div
+            class="profile-card"
+            data-country="Россия"
+            data-city="Санкт-Петербург"
+            data-goal="Раб"
+            data-vip="true"
+        >
+
+            <img
+                src="images/1.jpg"
+                alt="Анкета"
+            >
+
+            <div class="profile-info">
+
+                <h3>
+                    Санкт-Петербург
+                </h3>
+
+                <p>
+                    Общение, знакомства и новые интересные встречи.
+                </p>
+
+                <button type="button">
+                    Подробнее
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- VIP 3 -->
+
+        <div
+            class="profile-card"
+            data-country="Украина"
+            data-city="Киев"
+            data-goal="Госпожа"
+            data-vip="true"
+        >
+
+            <img
+                src="images/1.jpg"
+                alt="Анкета"
+            >
+
+            <div class="profile-info">
+
+                <h3>
+                    Киев
+                </h3>
+
+                <p>
+                    Хочу познакомиться с интересными людьми.
+                </p>
+
+                <button type="button">
+                    Подробнее
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- VIP 4 -->
+
+        <div
+            class="profile-card"
+            data-country="Украина"
+            data-city="Одесса"
+            data-goal="Раб"
+            data-vip="true"
+        >
+
+            <img
+                src="images/1.jpg"
+                alt="Анкета"
+            >
+
+            <div class="profile-info">
+
+                <h3>
+                    Одесса
+                </h3>
+
+                <p>
+                    Новые знакомства и приятное общение.
+                </p>
+
+                <button type="button">
+                    Подробнее
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- ОБЫЧНЫЕ АНКЕТЫ -->
+    <!-- ========================= -->
+
+    <div class="section-title normal-title">
+        ⭐️ Обычные Анкеты
+    </div>
+
+
+    <div
+        id="normalProfiles"
+        class="profiles"
+    >
+	
+	
+<!-- ОБЫЧНАЯ 1 -->
+
+        <div
+            class="profile-card"
+            data-country="Россия"
+            data-city="Москва"
+            data-goal="Раб"
+            data-vip="false"
+        >
+
+            <img
+                src="images/1.jpg"
+                alt="Анкета"
+            >
+
+            <div class="profile-info">
+
+                <h3>
+                    Москва
+                </h3>
+
+                <p>
+                    Описание анкеты
+                </p>
+
+                <button type="button">
+                    Подробнее
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ОБЫЧНАЯ 2 -->
+
+        <div
+            class="profile-card"
+            data-country="Украина"
+            data-city="Киев"
+            data-goal="Раб"
+            data-vip="false"
+        >
+
+            <img
+                src="images/1.jpg"
+                alt="Анкета"
+            >
+
+            <div class="profile-info">
+
+                <h3>
+                    Киев
+                </h3>
+
+                <p>
+                    Описание анкеты
+                </p>
+
+                <button type="button">
+                    Подробнее
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ОБЫЧНАЯ 3 -->
+
+        <div
+            class="profile-card"
+            data-country="Украина"
+            data-city="Одесса"
+            data-goal="Госпожа"
+            data-vip="false"
+        >
+
+            <img
+                src="images/1.jpg"
+                alt="Анкета"
+            >
+
+            <div class="profile-info">
+
+                <h3>
+                    Одесса
+                </h3>
+
+                <p>
+                    Описание анкеты
+                </p>
+
+                <button type="button">
+                    Подробнее
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ОБЫЧНАЯ 4 -->
+
+        <div
+            class="profile-card"
+            data-country="Украина"
+            data-city="Львов"
+            data-goal="Раб"
+            data-vip="false"
+        >
+
+            <img
+                src="images/1.jpg"
+                alt="Анкета"
+            >
+
+            <div class="profile-info">
+
+                <h3>
+                    Львов
+                </h3>
+
+                <p>
+                    Описание анкеты
+                </p>
+
+                <button type="button">
+                    Подробнее
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- НЕТ АНКЕТ -->
+
+    <section
+        id="empty"
+        class="empty-state hidden"
+    >
+
+        <div class="empty-icon">
+            ◌
+        </div>
+
+        <h2>
+            Анкеты не найдены
+        </h2>
+
+        <p>
+            Попробуйте изменить параметры поиска.
+        </p>
+
+    </section>
+
+</main>
+
+
+<!-- FOOTER -->
+
+<footer class="footer">
+
+    <strong>
+        Y<span>-FETISH</span>
+    </strong>
+
+    <span>
+        Знакомства и анкеты
+    </span>
+
+</footer>
+
+
+<script src="./profiles.js" defer></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', async function () {
+
+    const normalProfiles =
+        document.getElementById('normalProfiles');
+
+    const count =
+        document.getElementById('count');
+
+    const citySelect =
+        document.getElementById('city');
+
+    const searchButton =
+        document.getElementById('searchButton');
+
+    const resetButton =
+        document.getElementById('resetButton');
+
+    const empty =
+        document.getElementById('empty');
+
+
+    let ads = [];
+
+
+    // Загружаем объявления с сервера
+    async function loadAds() {
+
+        try {
+
+            const response =
+                await fetch('/api/ads');
+
+            if (!response.ok) {
+                throw new Error('Не удалось загрузить объявления');
+            }
+
+            ads = await response.json();
+
+            renderAds(ads);
+            updateCities(ads);
+
+        } catch (error) {
+
+            console.error('Ошибка загрузки анкет:', error);
+
+            count.textContent = '0';
+
+        }
+    }
+
+
+    // Показываем объявления
+    function renderAds(list) {
+
+        normalProfiles.innerHTML = '';
+
+        count.textContent = list.length;
+
+
+        if (list.length === 0) {
+
+            empty.classList.remove('hidden');
+
+            return;
+        }
+
+
+        empty.classList.add('hidden');
+
+
+        list.forEach(function (ad) {
+
+            const card =
+                document.createElement('div');
+
+            card.className = 'profile-card';
+
+
+            const image =
+                document.createElement('img');
+
+            if (ad.photo) {
+
+                image.src = ad.photo;
+
+            } else {
+
+                image.src = 'images/1.jpg';
+
+            }
+
+            image.alt = ad.title || 'Анкета';
+
+
+            const info =
+                document.createElement('div');
+
+            info.className = 'profile-info';
+
+
+            const title =
+                document.createElement('h3');
+
+            title.textContent =
+                ad.title || 'Без имени';
+
+
+            const description =
+                document.createElement('p');
+
+            description.textContent =
+                ad.description || '';
+
+
+            const city =
+                document.createElement('p');
+
+            city.textContent =
+                ad.city || '';
+
+
+            const button =
+                document.createElement('button');
+
+            button.type = 'button';
+
+            button.textContent = 'Подробнее';
+
+
+            info.appendChild(title);
+            info.appendChild(city);
+            info.appendChild(description);
+            info.appendChild(button);
+
+            card.appendChild(image);
+            card.appendChild(info);
+
+            normalProfiles.appendChild(card);
+
+        });
+
+    }
+
+
+    // Заполняем список городов
+    function updateCities(list) {
+
+        const cities = [];
+
+        list.forEach(function (ad) {
+
+            if (
+                ad.city &&
+                !cities.includes(ad.city)
+            ) {
+                cities.push(ad.city);
+            }
+
+        });
+
+
+        cities.sort();
+
+
+        citySelect.innerHTML =
+            '<option value="all">Все города</option>';
+
+
+        cities.forEach(function (city) {
+
+            const option =
+                document.createElement('option');
+
+            option.value = city;
+            option.textContent = city;
+
+            citySelect.appendChild(option);
+
+        });
+
+    }
+
+
+    // Поиск
+    searchButton.addEventListener(
+        'click',
+        function () {
+
+            const selectedCity =
+                citySelect.value;
+
+
+            let filtered = ads;
+
+
+            if (selectedCity !== 'all') {
+
+                filtered = ads.filter(function (ad) {
+
+                    return ad.city === selectedCity;
+
+                });
+
+            }
+
+
+            renderAds(filtered);
+
+        }
+    );
+
+
+    // Сброс
+    resetButton.addEventListener(
+        'click',
+        function () {
+
+            citySelect.value = 'all';
+
+            renderAds(ads);
+
+        }
+    );
+
+
+    // Старт
+    loadAds();
+
+});
+
+</script>
+
 </body>
+<script>
+window.addEventListener("load", function () {
+
+    var button = document.getElementById("menuButton");
+    var menu = document.getElementById("sideMenu");
+    var close = document.getElementById("closeMenu");
+    var overlay = document.getElementById("menuOverlay");
+
+    button.onclick = function () {
+        menu.style.setProperty("right", "0px", "important");
+        overlay.style.setProperty("display", "block", "important");
+    };
+
+    close.onclick = function () {
+        menu.style.setProperty("right", "-320px", "important");
+        overlay.style.setProperty("display", "none", "important");
+    };
+
+    overlay.onclick = function () {
+        menu.style.setProperty("right", "-320px", "important");
+        overlay.style.setProperty("display", "none", "important");
+    };
+
+});
+</script>
 </html>
