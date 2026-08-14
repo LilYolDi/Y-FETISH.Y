@@ -63,9 +63,10 @@ app.get('/api/ads', async (req, res) => {
 app.post('/api/ads', upload.single('photo'), async (req, res) => {
     try {
         const {
-            title,
-            description,
-            city
+          title,
+          description,
+          city,
+          telegram
         } = req.body;
 
         if (!title || !description || !city) {
@@ -119,10 +120,11 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
             .from('ads')
             .insert([
                 {
-                    title: title,
-                    description: description,
-                    city: city,
-                    photo: photoUrl
+                  title: title,
+                  description: description,
+                  city: city,
+                  telegram: telegram,
+                  photo: photoUrl
                 }
             ])
             .select()
