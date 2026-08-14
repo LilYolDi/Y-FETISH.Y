@@ -124,6 +124,19 @@
         >
 
         <img id="preview" alt="Предпросмотр фотографии">
+		
+		
+		<div class="form-group">
+    <label for="telegram">Telegram</label>
+
+    <input
+        type="text"
+        id="telegram"
+        name="telegram"
+        placeholder="@username"
+        required
+    >
+</div>
 
 
         <button type="submit" id="submitButton">
@@ -195,6 +208,11 @@
                 'city',
 				
 document.getElementById('city').value
+            );
+			
+			formData.append(
+             'telegram',
+            document.getElementById('telegram').value
             );
 
 
