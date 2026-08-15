@@ -777,12 +777,47 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             button.textContent = 'Подробнее';
 
+			
+			const telegramButton =
+                document.createElement('a');
+
+            telegramButton.textContent =
+              '💬 Telegram';
+
+            telegramButton.target = '_blank';
+
+            telegramButton.rel = 'noopener noreferrer';
+
+            if (ad.telegram) {
+
+             let username =
+             ad.telegram.trim();
+
+            if (username.startsWith('@')) {
+            username = username.substring(1);
+            }
+
+            telegramButton.href =
+             'https://t.me/' + username;
+
+} else {
+
+    telegramButton.href = '#';
+
+    telegramButton.textContent =
+        'Telegram не указан';
+
+    telegramButton.style.pointerEvents =
+        'none';
+
+}
+			
 
             info.appendChild(title);
             info.appendChild(city);
             info.appendChild(description);
             info.appendChild(button);
-
+			info.appendChild(telegramButton);
             card.appendChild(image);
             card.appendChild(info);
 
