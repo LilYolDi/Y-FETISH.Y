@@ -930,3 +930,37 @@ border: 1px solid #202020;
     width: 100%;
     margin-bottom: 40px;
 }
+
+
+
+
+
+
+
+.telegram-button {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
+    padding: 11px 15px;
+
+    background: #e50914;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 7px;
+
+    text-align: center;
+    text-decoration: none;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.telegram-button:hover {
+    background: #ff1a25;
+    transform: translateY(-1px);
+}
