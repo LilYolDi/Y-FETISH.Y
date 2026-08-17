@@ -67,6 +67,7 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
           description,
           city,
           telegram
+          channel
         } = req.body;
 
         if (!title || !description || !city) {
@@ -124,6 +125,7 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
                   description: description,
                   city: city,
                   telegram: telegram,
+                  channel: channel,
                   photo: photoUrl
                 }
             ])
