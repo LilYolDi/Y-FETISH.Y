@@ -773,17 +773,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 const button = document.createElement('a');
 
-button.textContent = 'Канал Госпожи';
-button.target = '_blank';
-button.rel = 'noopener noreferrer';
+button.className = 'telegram-button';
 
-if (ad.channel) {
-    button.href = ad.channel.trim();
-} else {
-    button.href = '#';
-    button.textContent = 'Канал не указан';
-    button.style.pointerEvents = 'none';
-}
+button.textContent = 'Подробнее';
+
+button.target = '_blank';
+
+button.rel = 'noopener noreferrer';
 
 
 			
