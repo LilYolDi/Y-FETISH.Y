@@ -777,6 +777,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             button.textContent = 'Подробнее';
 
+			if (ad.channel) {
+
+    button.onclick = function () {
+        window.open(
+            ad.channel,
+            '_blank'
+        );
+    };
+
+} else {
+
+    button.disabled = true;
+    button.textContent = 'Канал не указан';
+}
+
+
+			
 			
 			const telegramButton =
                 document.createElement('a');
