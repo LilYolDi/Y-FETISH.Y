@@ -67,6 +67,7 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
           description,
           city,
           telegram
+          telegram,
           channel
         } = req.body;
 
