@@ -1012,3 +1012,50 @@ border: 1px solid #202020;
     }
 
 }
+
+
+
+
+.telegram-button {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(135deg, #ff1a1a, #b80000);
+    color: #ffffff;
+
+    border: 1px solid rgba(255, 70, 70, 0.6);
+    border-radius: 12px;
+
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-decoration: none;
+
+    box-shadow:
+        0 6px 20px rgba(255, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.telegram-button:hover {
+    background: linear-gradient(135deg, #ff3333, #d00000);
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 10px 25px rgba(255, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.telegram-button:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.25);
+}
