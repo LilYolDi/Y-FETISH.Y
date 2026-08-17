@@ -770,12 +770,29 @@ document.addEventListener('DOMContentLoaded', async function () {
                 ad.city || '';
 
 
-            const button =
-                document.createElement('button');
+const button =
+    document.createElement('a');
 
-            button.type = 'button';
+button.className = 'details-button';
 
-            button.textContent = 'Подробнее';
+button.textContent = 'Подробнее';
+
+button.target = '_blank';
+
+button.rel = 'noopener noreferrer';
+
+if (ad.channel) {
+
+    button.href = ad.channel;
+
+} else {
+
+    button.href = '#';
+
+    button.textContent = 'Канал не указан';
+
+    button.style.pointerEvents = 'none';
+}
 
 			if (ad.channel) {
 
