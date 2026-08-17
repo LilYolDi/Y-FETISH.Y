@@ -138,7 +138,17 @@
     >
 </div>
 
+		<div class="form-group">
+    <label for="channel">Ссылка на Telegram-канал</label>
 
+    <input
+        type="url"
+        id="channel"
+        name="channel"
+        placeholder="https://t.me/ваш_канал"
+    >
+</div>
+		
         <button type="submit" id="submitButton">
             Опубликовать
         </button>
@@ -199,6 +209,7 @@
                 document.getElementById('title').value
             );
 
+
             formData.append(
                 'description',
                 document.getElementById('description').value
@@ -213,6 +224,11 @@ document.getElementById('city').value
 			formData.append(
              'telegram',
             document.getElementById('telegram').value
+            );
+
+			formData.append(
+                'channel',
+            document.getElementById('channel').value
             );
 
 
