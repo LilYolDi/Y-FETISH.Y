@@ -11,19 +11,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-app.get('/robots.txt', (req, res) => {
-    res.type('text/plain');
-    res.send(
-`User-agent: *
-Allow: /
-
-Sitemap: https://y-fetish-y.onrender.com/sitemap.xml`
-    );
-});
-
-
-
-
 const supabase = createClient(
     'https://cfdopweyymgwcgfynmbx.supabase.co',
     process.env.SUPABASE_KEY
