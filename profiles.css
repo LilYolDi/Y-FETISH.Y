@@ -1012,3 +1012,10 @@ border: 1px solid #202020;
     }
 
 }
+
+
+.seo-content {
+    max-width: 1000px;
+    margin: 50px auto 30px;
+    ...
+}
