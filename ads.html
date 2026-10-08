@@ -34,53 +34,52 @@
             padding: 20px 15px 50px;
         }
 
-        .logo {
-            text-align: center;
-            font-size: 42px;
-            font-weight: 800;
-            margin-bottom: 20px;
-        }
+.logo {
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 800;
+    white-space: nowrap;
+}
 
-        .logo-y {
-            color: #e00000;
-        }
+.logo-y {
+    color: #e00000;
+}
 
-        .logo-fetish {
-            color: #fff;
-        }
+.logo-fetish {
+    color: #fff;
+}
 
-        h1 {
-            text-align: center;
-            font-size: 27px;
-            margin: 15px 0;
-        }
+h1 {
+    text-align: center;
+    font-size: 27px;
+    margin: 15px 0 20px;
+}
 
-        .seo-text {
-            color: #ccc;
-            text-align: center;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
+.seo-text {
+    color: #aaa;
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
 
-        .seo-text strong {
-            color: #fff;
-        }
+.seo-text strong {
+    color: #fff;
+}
 
-        .create {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
+.add-button {
+    background: #e00000;
+    color: #fff;
+    text-decoration: none;
+    padding: 10px 16px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: bold;
+    white-space: nowrap;
+}
 
-            background: #e00000;
-            color: #fff;
-
-            text-align: center;
-            text-decoration: none;
-
-            border-radius: 8px;
-            font-weight: bold;
-        }
+.add-button:hover {
+    background: #ff0000;
+}
 
         .create:hover {
             background: #ff0000;
@@ -169,18 +168,25 @@
 
 <body>
 
-<div class="container">
+<header class="topbar">
+    <div class="topbar-inner">
 
-    <div class="logo">
-        <span class="logo-y">Y</span><span class="logo-fetish">-FETISH</span>
+        <a href="/profiles.html" class="logo">
+            <span class="logo-y">Y</span><span class="logo-fetish">-FETISH</span>
+        </a>
+
+        <a href="/new-text-ad.html" class="add-button">
+            + ДОБАВИТЬ АНКЕТУ
+        </a>
+
     </div>
+</header>
 
-    <h1>
-        Госпожа ищет раба — Раб ищет госпожу
-    </h1>
+<main class="container">
+
+    <h1>Госпожа ищет раба — Раб ищет госпожу</h1>
 
     <div class="seo-text">
-
         <p>
             Текстовые анкеты Y-FETISH для знакомств.
             Здесь размещаются объявления, где
@@ -193,34 +199,19 @@
             Киев, Львов, Одесса, Ивано-Франковск
             и другие города.
         </p>
-
     </div>
 
-    <a class="create" href="/ad.html">
-        + СОЗДАТЬ АНКЕТУ
-    </a>
-
     <div class="filters">
-
-        <button onclick="loadAds('all')">
-            Все
-        </button>
-
-        <button onclick="loadAds('Госпожа')">
-            Госпожа
-        </button>
-
-        <button onclick="loadAds('Раб')">
-            Раб
-        </button>
-
+        <button onclick="loadAds('all')">Все</button>
+        <button onclick="loadAds('Госпожа')">Госпожа</button>
+        <button onclick="loadAds('Раб')">Раб</button>
     </div>
 
     <div id="ads">
-        <div class="empty">
-            Загрузка анкет...
-        </div>
+        <div class="empty">Загрузка анкет...</div>
     </div>
+
+</main>
 
 </div>
 
