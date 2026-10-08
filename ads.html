@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Госпожа ищет раба — Раб ищет госпожу | Y-FETISH</title>
+
+    <meta name="description"
+          content="Госпожа ищет раба, раб ищет госпожу. Текстовые анкеты Y-FETISH по городам Украины.">
+
+    <meta name="robots" content="index, follow">
+
+    <link rel="canonical"
+          href="https://y-fetish-y.onrender.com/text-ads.html">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #000;
+            color: #fff;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px;
+            margin: auto;
+            padding: 20px 15px 50px;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .logo-y {
+            color: #e00000;
+        }
+
+        .logo-fetish {
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 27px;
+            margin: 15px 0;
+        }
+
+        .seo-text {
+            color: #ccc;
+            text-align: center;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .seo-text strong {
+            color: #fff;
+        }
+
+        .create {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 20px;
+
+            background: #e00000;
+            color: #fff;
+
+            text-align: center;
+            text-decoration: none;
+
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .create:hover {
+            background: #ff0000;
+        }
+
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .filters button {
+            background: #111;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+        }
+
+        .filters button:hover {
+            border-color: #e00000;
+        }
+
+        .ad {
+            background: #111;
+            border: 1px solid #292929;
+            border-radius: 10px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .ad h2 {
+            margin: 0 0 10px;
+            font-size: 21px;
+        }
+
+        .type {
+            color: #e00000;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .city {
+            color: #999;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            color: #ddd;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .telegram {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 10px 15px;
+
+            background: #168bd1;
+            color: #fff;
+
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 30px;
+        }
+
+        @media (max-width: 600px) {
+            .logo {
+                font-size: 38px;
+            }
+
+            h1 {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <span class="logo-y">Y</span><span class="logo-fetish">-FETISH</span>
+    </div>
+
+    <h1>
+        Госпожа ищет раба — Раб ищет госпожу
+    </h1>
+
+    <div class="seo-text">
+
+        <p>
+            Текстовые анкеты Y-FETISH для знакомств.
+            Здесь размещаются объявления, где
+            <strong>госпожа ищет раба</strong>
+            или <strong>раб ищет госпожу</strong>.
+        </p>
+
+        <p>
+            Анкеты доступны по городам Украины:
+            Киев, Львов, Одесса, Ивано-Франковск
+            и другие города.
+        </p>
+
+    </div>
+
+    <a class="create" href="/new-text-ad.html">
+        + СОЗДАТЬ АНКЕТУ
+    </a>
+
+    <div class="filters">
+
+        <button onclick="loadAds('all')">
+            Все
+        </button>
+
+        <button onclick="loadAds('Госпожа')">
+            Госпожа
+        </button>
+
+        <button onclick="loadAds('Раб')">
+            Раб
+        </button>
+
+    </div>
+
+    <div id="ads">
+        <div class="empty">
+            Загрузка анкет...
+        </div>
+    </div>
+
+</div>
+
+<script>
+
+async function loadAds(type = "all") {
+
+    const container = document.getElementById("ads");
+
+    try {
+
+        const response = await fetch("/api/text-ads");
+
+        if (!response.ok) {
+            throw new Error("API error");
+        }
+
+        const ads = await response.json();
+
+        const filtered =
+            type === "all"
+                ? ads
+                : ads.filter(ad => ad.type === type);
+
+        if (!filtered.length) {
+
+            container.innerHTML =
+                '<div class="empty">Анкет пока нет.</div>';
+
+            return;
+        }
+
+        container.innerHTML = filtered.map(ad => {
+
+            let telegram = "";
+
+            if (ad.telegram) {
+
+                const username =
+                    ad.telegram.replace("@", "").trim();
+
+                telegram = `
+                    <a
+                        class="telegram"
+                        href="https://t.me/${encodeURIComponent(username)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        Telegram
+                    </a>
+                `;
+            }
+
+            return `
+                <article class="ad">
+
+                    <h2>
+                        ${escapeHtml(ad.title)}
+                    </h2>
+
+                    <div class="type">
+                        ${escapeHtml(ad.type)}
+                    </div>
+
+                    <div class="city">
+                        📍 ${escapeHtml(ad.city)}
+                    </div>
+
+                    <div class="description">
+                        ${escapeHtml(ad.description)}
+                    </div>
+
+                    ${telegram}
+
+                </article>
+            `;
+
+        }).join("");
+
+    } catch (error) {
+
+        container.innerHTML =
+            '<div class="empty">Анкеты временно недоступны.</div>';
+
+        console.error(error);
+    }
+}
+
+function escapeHtml(text) {
+
+    return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+loadAds();
+
+</script>
+
+</body>
+</html>
