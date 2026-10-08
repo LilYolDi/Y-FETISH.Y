@@ -172,6 +172,110 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
 
 
 
+// ==========================================
+// ТЕКСТОВЫЕ АНКЕТЫ — ВТОРАЯ СТРАНИЦА
+// ==========================================
+
+// Получить текстовые анкеты
+app.get('/api/text-ads', async (req, res) => {
+    try {
+
+        const { data, error } = await supabase
+            .from('text_profiles')
+            .select('*')
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Ошибка Supabase text_profiles:', error);
+
+            return res.status(500).json({
+                error: error.message,
+                code: error.code
+            });
+        }
+
+        res.json(data);
+
+    } catch (error) {
+
+        console.error('Ошибка:', error);
+
+        res.status(500).json({
+            error: error.message
+        });
+
+    }
+});
+
+
+// Создать текстовую анкету
+app.post('/api/text-ads', async (req, res) => {
+    try {
+
+        const {
+            title,
+            type,
+            city,
+            description,
+            telegram
+        } = req.body;
+
+        if (!title || !type || !city || !description) {
+            return res.status(400).json({
+                error: 'Заполни название, кто ты, город и текст анкеты'
+            });
+        }
+
+        if (type !== 'Госпожа' && type !== 'Раб') {
+            return res.status(400).json({
+                error: 'Неверно выбран тип анкеты'
+            });
+        }
+
+        const { data, error } = await supabase
+            .from('text_profiles')
+            .insert([
+                {
+                    title: title.trim(),
+                    type: type,
+                    city: city.trim(),
+                    description: description.trim(),
+                    telegram: telegram
+                        ? telegram.trim()
+                        : null
+                }
+            ])
+            .select()
+            .single();
+
+        if (error) {
+            console.error('Ошибка Supabase text_profiles:', error);
+
+            return res.status(500).json({
+                error: error.message,
+                code: error.code
+            });
+        }
+
+        res.status(201).json({
+            success: true,
+            message: 'Текстовая анкета опубликована!',
+            ad: data
+        });
+
+    } catch (error) {
+
+        console.error('Ошибка создания текстовой анкеты:', error);
+
+        res.status(500).json({
+            error: error.message
+        });
+
+    }
+});
+
+
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, '0.0.0.0', () => {
