@@ -30,6 +30,11 @@ const supabase = createClient(
     process.env.SUPABASE_KEY
 );
 
+const supabaseText = createClient(
+    'https://cdyuxiicllnfrwssigsr.supabase.co',
+    process.env.SUPABASE_TEXT_KEY
+);
+
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: {
@@ -180,7 +185,7 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
 app.get('/api/text-ads', async (req, res) => {
     try {
 
-        const { data, error } = await supabase
+        const { data, error } = await supabaseText
             .from('text_profiles')
             .select('*')
             .order('created_at', { ascending: false });
@@ -232,7 +237,7 @@ app.post('/api/text-ads', async (req, res) => {
             });
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await supabaseText
             .from('text_profiles')
             .insert([
                 {
