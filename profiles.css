@@ -1132,3 +1132,25 @@ border: 1px solid #202020;
     min-height: auto;
     overflow: visible;
 }
+
+
+#normalProfiles .profile-card {
+    display: flex;
+    flex-direction: column;
+}
+
+#normalProfiles .profile-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+#normalProfiles .profile-info button:first-of-type,
+#normalProfiles .profile-info .telegram-button:first-of-type {
+    margin-top: auto;
+}
+
+#normalProfiles .profile-info .telegram-button + .telegram-button {
+    margin-top: 10px;
+}
