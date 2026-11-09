@@ -1154,3 +1154,64 @@ border: 1px solid #202020;
 #normalProfiles .profile-info .telegram-button + .telegram-button {
     margin-top: 10px;
 }
+
+
+
+
+
+
+
+/* ЕДИНОЕ ОФОРМЛЕНИЕ VIP И ОБЫЧНЫХ АНКЕТ */
+
+.profiles {
+    align-items: stretch;
+    grid-auto-rows: 1fr;
+}
+
+.profiles .profile-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+    overflow: hidden;
+}
+
+.profiles .profile-card > img {
+    display: block;
+    width: 100%;
+    height: 280px;
+    min-height: 280px;
+    flex: 0 0 280px;
+    object-fit: cover;
+}
+
+.profiles .profile-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: visible;
+}
+
+.profiles .profile-info p {
+    overflow: visible;
+}
+
+.profiles .profile-info .profile-description {
+    display: block;
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: initial;
+    overflow: visible;
+}
+
+.profiles .profile-info > button,
+.profiles .profile-info > .telegram-button:first-of-type {
+    margin-top: auto;
+    flex-shrink: 0;
+}
+
+.profiles .profile-info > .telegram-button + .telegram-button {
+    margin-top: 10px;
+    flex-shrink: 0;
+}
