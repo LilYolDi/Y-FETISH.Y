@@ -1060,3 +1060,39 @@ border: 1px solid #202020;
     margin: 50px auto 30px;
     ...
 }
+
+
+
+
+
+
+
+/* ОДИНАКОВЫЙ РАЗМЕР ОБЫЧНЫХ АНКЕТ С VIP */
+
+#normalProfiles .profile-card {
+    display: flex;
+    flex-direction: column;
+    height: 480px;
+    min-height: 480px;
+    overflow: hidden;
+}
+
+#normalProfiles .profile-card > img {
+    width: 100%;
+    height: 280px;
+    min-height: 280px;
+    flex: 0 0 280px;
+    object-fit: cover;
+}
+
+#normalProfiles .profile-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+#normalProfiles .profile-info button,
+#normalProfiles .profile-info .telegram-button:first-of-type {
+    margin-top: auto;
+}
