@@ -1018,20 +1018,30 @@ border: 1px solid #202020;
 
 .profiles {
     align-items: stretch;
-    grid-auto-rows: 1fr;
+    grid-auto-rows: 480px;
 }
 
-.profile-card {
+.profiles .profile-card {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    min-height: 300px;
+    height: 480px;
+    min-height: 480px;
+    overflow: hidden;
 }
 
-.profile-card .profile-info {
+.profiles .profile-card > img {
+    width: 100%;
+    height: 280px;
+    min-height: 280px;
+    flex: 0 0 280px;
+    object-fit: cover;
+}
+
+.profiles .profile-card > .profile-info {
     display: flex;
     flex-direction: column;
     flex: 1;
+    min-height: 0;
 }
 
 .profile-info button,
@@ -1042,6 +1052,8 @@ border: 1px solid #202020;
 .profile-info .telegram-button + .telegram-button {
     margin-top: 10px;
 }
+
+
 
 .seo-content {
     max-width: 1000px;
