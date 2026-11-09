@@ -1098,18 +1098,3 @@ border: 1px solid #202020;
 }
 
 
-/* Уменьшаем только обычные анкеты */
-#normalProfiles {
-    grid-auto-rows: 420px;
-}
-
-#normalProfiles .profile-card {
-    height: 420px;
-    min-height: 420px;
-}
-
-#normalProfiles .profile-card > img {
-    height: 200px;
-    min-height: 200px;
-    flex: 0 0 200px;
-}
