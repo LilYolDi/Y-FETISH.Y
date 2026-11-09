@@ -133,10 +133,11 @@
         }
 
         @media (max-width: 450px) {
-            .profiles {
-                grid-template-columns: 1fr !important;
-            }
-        }
+    .profiles {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 10px !important;
+    }
+}
 
         /* SEO-ТЕКСТ */
 
