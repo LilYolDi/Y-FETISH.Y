@@ -1017,14 +1017,14 @@ border: 1px solid #202020;
 /* ВЫРАВНИВАНИЕ КНОПОК В АНКЕТАХ */
 
 .profiles {
-    align-items: stretch;
-    grid-auto-rows: 1fr;
+    align-items: start;
+    grid-auto-rows: auto;
 }
 
 .profile-card {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    height: auto;
 }
 
 .profile-card .profile-info {
