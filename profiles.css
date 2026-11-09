@@ -1096,3 +1096,20 @@ border: 1px solid #202020;
 #normalProfiles .profile-info .telegram-button:first-of-type {
     margin-top: auto;
 }
+
+
+/* Уменьшаем только обычные анкеты */
+#normalProfiles {
+    grid-auto-rows: 380px;
+}
+
+#normalProfiles .profile-card {
+    height: 380px;
+    min-height: 380px;
+}
+
+#normalProfiles .profile-card > img {
+    height: 200px;
+    min-height: 200px;
+    flex: 0 0 200px;
+}
