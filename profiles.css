@@ -1014,17 +1014,18 @@ border: 1px solid #202020;
 }
 
 
-/* ВЫРАВНИВАНИЕ КНОПОК В АНКЕТАХ */
+/* ОДИНАКОВЫЙ РАЗМЕР ВСЕХ АНКЕТ */
 
 .profiles {
-    align-items: start;
-    grid-auto-rows: auto;
+    align-items: stretch;
+    grid-auto-rows: 1fr;
 }
 
 .profile-card {
     display: flex;
     flex-direction: column;
-    height: auto;
+    height: 100%;
+    min-height: 480px;
 }
 
 .profile-card .profile-info {
@@ -1033,10 +1034,7 @@ border: 1px solid #202020;
     flex: 1;
 }
 
-.profile-info button {
-    margin-top: auto;
-}
-
+.profile-info button,
 .profile-info .telegram-button:first-of-type {
     margin-top: auto;
 }
