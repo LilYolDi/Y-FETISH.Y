@@ -1024,7 +1024,7 @@ border: 1px solid #202020;
 .profiles .profile-card {
     display: flex;
     flex-direction: column;
-    height: 480px;
+    height: 300px;
     min-height: 480px;
     overflow: hidden;
 }
