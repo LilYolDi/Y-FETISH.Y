@@ -4,10 +4,7 @@
 <head>
     <meta charset="UTF-8">
 
-    <meta
-        name="google-site-verification"
-        content="K7ColnisEqWYScJdwRQRGUqWqZsEEwyUCd1faxFB638"
-    >
+    <meta name="google-site-verification" content="K7ColnisEqWYScJdwRQRGUqWqZsEEwyUCd1faxFB638">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -15,38 +12,23 @@
 
     <link rel="icon" type="image/png" href="/favicon.png">
 
-    <meta
-        name="description"
-        content="BDSM знакомства в Украине. Анкеты Госпож, Рабов и людей, ищущих тематические знакомства и общение. Поиск по городам и цели знакомства на Y-FETISH."
-    >
+    <meta name="description" content="BDSM знакомства в Украине. Анкеты Госпож, Рабов и людей, ищущих тематические знакомства и общение. Поиск по городам и цели знакомства на Y-FETISH.">
 
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
 
-    <link
-        rel="canonical"
-        href="https://y-fetish-y.onrender.com/profiles.html"
-    >
+    <link rel="canonical" href="https://y-fetish-y.onrender.com/profiles.html">
 
     <meta property="og:type" content="website">
     <meta property="og:title" content="BDSM знакомства в Украине — Y-FETISH">
-    <meta
-        property="og:description"
-        content="BDSM анкеты и знакомства в Украине. Ищите Госпожу, Раба или партнёра для тематического общения на Y-FETISH."
-    >
-    <meta
-        property="og:url"
-        content="https://y-fetish-y.onrender.com/profiles.html"
-    >
+    <meta property="og:description" content="BDSM анкеты и знакомства в Украине. Ищите Госпожу, Раба или партнёра для тематического общения на Y-FETISH.">
+    <meta property="og:url" content="https://y-fetish-y.onrender.com/profiles.html">
     <meta property="og:site_name" content="Y-FETISH">
     <meta property="og:locale" content="ru_RU">
 
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="BDSM знакомства в Украине — Y-FETISH">
-    <meta
-        name="twitter:description"
-        content="BDSM знакомства, анкеты Госпож и Рабов в Украине. Поиск по городам и цели знакомства."
-    >
+    <meta name="twitter:description" content="BDSM знакомства, анкеты Госпож и Рабов в Украине. Поиск по городам и цели знакомства.">
 
     <link rel="stylesheet" href="./profiles.css">
 
@@ -73,15 +55,11 @@
             box-sizing: border-box;
         }
 
-        /* Планшет */
-
         @media (max-width: 1000px) {
             .profiles {
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
             }
         }
-
-        /* Телефон */
 
         @media (max-width: 700px) {
             .profiles {
@@ -117,17 +95,77 @@
             margin: 0 0 15px;
         }
 
-        /* EMAIL АККАУНТА */
+        /* МЕНЮ ПРОФИЛЯ */
+
+        #account {
+            position: relative;
+        }
 
         #accountButton {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
+            justify-content: center;
+            cursor: pointer;
         }
 
-        #accountEmail {
+        .account-dropdown {
+            position: absolute;
+            top: calc(100% + 12px);
+            right: 0;
+            z-index: 9999;
+            width: 245px;
+            padding: 16px;
+            box-sizing: border-box;
+            background: #171717;
+            border: 1px solid #b58a32;
+            border-radius: 12px;
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65);
+        }
+
+        .account-dropdown[hidden] {
+            display: none !important;
+        }
+
+        .account-email {
+            display: block;
+            padding: 5px 3px 14px;
+            margin-bottom: 12px;
+            color: #f3d47c;
             font-size: 13px;
+            line-height: 1.5;
             overflow-wrap: anywhere;
+            border-bottom: 1px solid rgba(220, 180, 75, 0.3);
+        }
+
+        .account-menu-link,
+        .account-menu-logout {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            box-sizing: border-box;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .account-menu-link {
+            margin-bottom: 9px;
+            color: #17120a;
+            background: linear-gradient(180deg, #fff2b0, #c58a18);
+        }
+
+        .account-menu-logout {
+            color: #fff;
+            background: #292020;
+            border: 1px solid #9e3434;
+        }
+
+        .account-menu-link:hover,
+        .account-menu-logout:hover {
+            filter: brightness(1.12);
         }
     </style>
 </head>
@@ -141,19 +179,42 @@
     <div class="header-right">
 
         <div id="account" class="account">
-            <a
-                href="./account.html"
+
+            <button
+                type="button"
                 class="account-icon-button"
                 id="accountButton"
                 aria-label="Аккаунт"
                 title="Аккаунт"
+                aria-expanded="false"
+                aria-controls="accountDropdown"
             >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <circle cx="12" cy="8" r="4"></circle>
                     <path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"></path>
                 </svg>
-                <span id="accountEmail"></span>
-            </a>
+            </button>
+
+            <div
+                id="accountDropdown"
+                class="account-dropdown"
+                hidden
+            >
+                <div id="accountEmail" class="account-email"></div>
+
+                <a href="./publish.html" class="account-menu-link">
+                    Добавить анкету
+                </a>
+
+                <button
+                    id="logout"
+                    class="account-menu-logout"
+                    type="button"
+                >
+                    Выйти
+                </button>
+            </div>
+
         </div>
 
         <button
@@ -206,16 +267,7 @@
 
     </nav>
 
-    <button
-        id="logout"
-        class="logout-button"
-        type="button"
-    >
-        Выйти
-    </button>
-
 </aside>
-
 
 <div id="menuOverlay" class="menu-overlay"></div>
 
@@ -250,57 +302,34 @@
     <section class="filters">
 
         <div class="filter">
-
             <label for="country">Страна</label>
 
             <select id="country">
-
                 <option value="all">Все страны</option>
-
                 <option value="Украина">Украина</option>
-
                 <option value="Россия">Россия</option>
-
             </select>
-
         </div>
 
-
         <div class="filter">
-
             <label for="city">Город</label>
 
             <select id="city">
-
                 <option value="all">Все города</option>
-
             </select>
-
         </div>
 
-
         <div class="filter">
-
             <label for="goal">Цель знакомства</label>
 
             <select id="goal">
-
                 <option value="all">Все цели</option>
-
                 <option value="Госпожа">Госпожа</option>
-
                 <option value="Раб">Раб</option>
-
             </select>
-
         </div>
 
-
-        <button
-            id="searchButton"
-            class="search-button"
-            type="button"
-        >
+        <button id="searchButton" class="search-button" type="button">
             Найти
         </button>
 
@@ -316,11 +345,7 @@
             <strong id="count">0</strong>
         </div>
 
-        <button
-            id="resetButton"
-            class="reset-button"
-            type="button"
-        >
+        <button id="resetButton" class="reset-button" type="button">
             Сбросить
         </button>
 
@@ -333,126 +358,82 @@
         ⭐️ VIP Анкеты
     </div>
 
-
     <div id="vipProfiles" class="profiles">
 
-        <!-- VIP 1 -->
-
-        <div
-            class="profile-card"
-            data-country="Россия"
-            data-city="Москва"
-            data-goal="Госпожа"
-            data-vip="true"
-        >
+        <div class="profile-card"
+             data-country="Россия"
+             data-city="Москва"
+             data-goal="Госпожа"
+             data-vip="true">
 
             <img src="images/2.jpg" alt="Анкета">
 
             <div class="profile-info">
-
                 <h3>Москва</h3>
-
                 <p>Ищу интересных людей для общения и знакомств.</p>
 
-                <button
-                    type="button"
-                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')"
-                >
+                <button type="button"
+                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
                     Купить VIP
                 </button>
-
             </div>
-
         </div>
 
-
-        <!-- VIP 2 -->
-
-        <div
-            class="profile-card"
-            data-country="Россия"
-            data-city="Санкт-Петербург"
-            data-goal="Раб"
-            data-vip="true"
-        >
+        <div class="profile-card"
+             data-country="Россия"
+             data-city="Санкт-Петербург"
+             data-goal="Раб"
+             data-vip="true">
 
             <img src="images/2.jpg" alt="Анкета">
 
             <div class="profile-info">
-
                 <h3>Санкт-Петербург</h3>
-
                 <p>Общение, знакомства и новые интересные встречи.</p>
 
-                <button
-                    type="button"
-                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')"
-                >
+                <button type="button"
+                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
                     Купить VIP
                 </button>
-
             </div>
-
         </div>
 
-
-        <!-- VIP 3 -->
-
-        <div
-            class="profile-card"
-            data-country="Украина"
-            data-city="Киев"
-            data-goal="Госпожа"
-            data-vip="true"
-        >
+        <div class="profile-card"
+             data-country="Украина"
+             data-city="Киев"
+             data-goal="Госпожа"
+             data-vip="true">
 
             <img src="images/2.jpg" alt="Анкета">
 
             <div class="profile-info">
-
                 <h3>Киев</h3>
-
                 <p>Хочу познакомиться с интересными людьми.</p>
 
-                <button
-                    type="button"
-                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')"
-                >
+                <button type="button"
+                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
                     Купить VIP
                 </button>
-
             </div>
-
         </div>
 
-
-        <!-- VIP 4 -->
-
-        <div
-            class="profile-card"
-            data-country="Украина"
-            data-city="Одесса"
-            data-goal="Раб"
-            data-vip="true"
-        >
+        <div class="profile-card"
+             data-country="Украина"
+             data-city="Одесса"
+             data-goal="Раб"
+             data-vip="true">
 
             <img src="images/2.jpg" alt="Анкета">
 
             <div class="profile-info">
-
                 <h3>Одесса</h3>
-
                 <p>Новые знакомства и приятное общение.</p>
 
-                <button
-                    type="button"
-                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')"
-                >
+                <button type="button"
+                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
                     Купить VIP
                 </button>
-
             </div>
-
         </div>
 
     </div>
@@ -464,106 +445,66 @@
         ⭐️ Обычные Анкеты
     </div>
 
-
     <div id="normalProfiles" class="profiles">
 
-        <!-- ОБЫЧНАЯ 1 -->
-
-        <div
-            class="profile-card"
-            data-country="Россия"
-            data-city="Москва"
-            data-goal="Раб"
-            data-vip="false"
-        >
+        <div class="profile-card"
+             data-country="Россия"
+             data-city="Москва"
+             data-goal="Раб"
+             data-vip="false">
 
             <img src="images/1.jpg" alt="Анкета">
 
             <div class="profile-info">
-
                 <h3>Москва</h3>
-
                 <p>Описание анкеты</p>
-
                 <button type="button">Подробнее</button>
-
             </div>
-
         </div>
 
-
-        <!-- ОБЫЧНАЯ 2 -->
-
-        <div
-            class="profile-card"
-            data-country="Украина"
-            data-city="Киев"
-            data-goal="Раб"
-            data-vip="false"
-        >
+        <div class="profile-card"
+             data-country="Украина"
+             data-city="Киев"
+             data-goal="Раб"
+             data-vip="false">
 
             <img src="images/1.jpg" alt="Анкета">
 
             <div class="profile-info">
-
                 <h3>Киев</h3>
-
                 <p>Описание анкеты</p>
-
                 <button type="button">Подробнее</button>
-
             </div>
-
         </div>
 
-
-        <!-- ОБЫЧНАЯ 3 -->
-
-        <div
-            class="profile-card"
-            data-country="Украина"
-            data-city="Одесса"
-            data-goal="Госпожа"
-            data-vip="false"
-        >
+        <div class="profile-card"
+             data-country="Украина"
+             data-city="Одесса"
+             data-goal="Госпожа"
+             data-vip="false">
 
             <img src="images/1.jpg" alt="Анкета">
 
             <div class="profile-info">
-
                 <h3>Одесса</h3>
-
                 <p>Описание анкеты</p>
-
                 <button type="button">Подробнее</button>
-
             </div>
-
         </div>
 
-
-        <!-- ОБЫЧНАЯ 4 -->
-
-        <div
-            class="profile-card"
-            data-country="Украина"
-            data-city="Львов"
-            data-goal="Раб"
-            data-vip="false"
-        >
+        <div class="profile-card"
+             data-country="Украина"
+             data-city="Львов"
+             data-goal="Раб"
+             data-vip="false">
 
             <img src="images/1.jpg" alt="Анкета">
 
             <div class="profile-info">
-
                 <h3>Львов</h3>
-
                 <p>Описание анкеты</p>
-
                 <button type="button">Подробнее</button>
-
             </div>
-
         </div>
 
     </div>
@@ -655,36 +596,22 @@
 <script src="./profiles.js" defer></script>
 
 
+<!-- ЗАГРУЗКА АНКЕТ -->
+
 <script>
 document.addEventListener('DOMContentLoaded', async function () {
 
-    const normalProfiles =
-        document.getElementById('normalProfiles');
-
-    const count =
-        document.getElementById('count');
-
-    const citySelect =
-        document.getElementById('city');
-
-    const searchButton =
-        document.getElementById('searchButton');
-
-    const resetButton =
-        document.getElementById('resetButton');
-
-    const empty =
-        document.getElementById('empty');
+    const normalProfiles = document.getElementById('normalProfiles');
+    const count = document.getElementById('count');
+    const citySelect = document.getElementById('city');
+    const searchButton = document.getElementById('searchButton');
+    const resetButton = document.getElementById('resetButton');
+    const empty = document.getElementById('empty');
 
     let ads = [];
 
-
-    // Загружаем объявления с сервера
-
     async function loadAds() {
-
         try {
-
             const response = await fetch('/api/ads');
 
             if (!response.ok) {
@@ -697,16 +624,10 @@ document.addEventListener('DOMContentLoaded', async function () {
             updateCities(ads);
 
         } catch (error) {
-
             console.error('Ошибка загрузки анкет:', error);
-
             count.textContent = '0';
-
         }
     }
-
-
-    // Показываем объявления
 
     function renderAds(list) {
 
@@ -715,9 +636,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         count.textContent = list.length;
 
         if (list.length === 0) {
-
             empty.classList.remove('hidden');
-
             return;
         }
 
@@ -726,76 +645,44 @@ document.addEventListener('DOMContentLoaded', async function () {
         list.forEach(function (ad) {
 
             const card = document.createElement('div');
-
             card.className = 'profile-card';
 
-
             const image = document.createElement('img');
-
-            if (ad.photo) {
-                image.src = ad.photo;
-            } else {
-                image.src = 'images/1.jpg';
-            }
-
+            image.src = ad.photo || 'images/1.jpg';
             image.alt = ad.title || 'Анкета';
 
-
             const info = document.createElement('div');
-
             info.className = 'profile-info';
 
-
             const title = document.createElement('h3');
-
             title.textContent = ad.title || 'Без имени';
 
-
             const description = document.createElement('p');
-
             description.textContent = ad.description || '';
 
-
             const city = document.createElement('p');
-
             city.textContent = ad.city || '';
 
-
             const button = document.createElement('a');
-
             button.className = 'telegram-button';
-
             button.textContent = 'Канал Госпожи';
-
             button.target = '_blank';
-
             button.rel = 'noopener noreferrer';
 
-
             if (ad.channel) {
-
                 button.onclick = function () {
                     window.open(ad.channel, '_blank');
                 };
-
             } else {
-
                 button.textContent = 'Канал не указан';
-
                 button.style.pointerEvents = 'none';
             }
 
-
             const telegramButton = document.createElement('a');
-
             telegramButton.className = 'telegram-button';
-
             telegramButton.textContent = '💬 Написать в Telegram';
-
             telegramButton.target = '_blank';
-
             telegramButton.rel = 'noopener noreferrer';
-
 
             if (ad.telegram) {
 
@@ -810,12 +697,9 @@ document.addEventListener('DOMContentLoaded', async function () {
             } else {
 
                 telegramButton.href = '#';
-
                 telegramButton.textContent = 'Telegram не указан';
-
                 telegramButton.style.pointerEvents = 'none';
             }
-
 
             info.appendChild(title);
             info.appendChild(city);
@@ -829,22 +713,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             normalProfiles.appendChild(card);
 
         });
-
     }
-
-
-    // Заполняем список городов
 
     function updateCities(list) {
 
         const cities = [];
 
         list.forEach(function (ad) {
-
             if (ad.city && !cities.includes(ad.city)) {
                 cities.push(ad.city);
             }
-
         });
 
         cities.sort();
@@ -857,17 +735,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             const option = document.createElement('option');
 
             option.value = city;
-
             option.textContent = city;
 
             citySelect.appendChild(option);
 
         });
-
     }
-
-
-    // Поиск
 
     searchButton.addEventListener('click', function () {
 
@@ -876,19 +749,14 @@ document.addEventListener('DOMContentLoaded', async function () {
         let filtered = ads;
 
         if (selectedCity !== 'all') {
-
             filtered = ads.filter(function (ad) {
                 return ad.city === selectedCity;
             });
-
         }
 
         renderAds(filtered);
 
     });
-
-
-    // Сброс
 
     resetButton.addEventListener('click', function () {
 
@@ -898,101 +766,128 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     });
 
-
-    // Старт
-
     loadAds();
 
 });
 </script>
 
 
-<!-- ПРОВЕРКА АВТОРИЗАЦИИ И EMAIL -->
+<!-- ПРОВЕРКА АВТОРИЗАЦИИ И МЕНЮ ПРОФИЛЯ -->
 
 <script>
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener("DOMContentLoaded", function () {
 
-    try {
+    const accountButton = document.getElementById("accountButton");
+    const accountDropdown = document.getElementById("accountDropdown");
+    const accountEmail = document.getElementById("accountEmail");
 
-        const response = await fetch("/api/auth/me", {
-            credentials: "same-origin"
-        });
+    let authenticated = false;
 
-        if (!response.ok) return;
+    function closeAccountMenu() {
+        accountDropdown.hidden = true;
+        accountButton.setAttribute("aria-expanded", "false");
+    }
 
-        const data = await response.json();
+    function openAccountMenu() {
+        accountDropdown.hidden = false;
+        accountButton.setAttribute("aria-expanded", "true");
+    }
 
-        if (data.user && data.user.email) {
+    async function checkAccount() {
 
-            const button =
-                document.getElementById("accountButton");
+        try {
 
-            const email =
-                document.getElementById("accountEmail");
+            const response = await fetch("/api/auth/me", {
+                credentials: "same-origin"
+            });
 
-            if (button && email) {
+            if (!response.ok) {
+                authenticated = false;
+                return;
+            }
 
-                email.textContent = data.user.email;
+            const data = await response.json();
 
-                button.title = data.user.email;
+            if (data.user && data.user.email) {
 
-                button.setAttribute(
-                    "aria-label",
-                    data.user.email
-                );
+                authenticated = true;
+
+                accountEmail.textContent = data.user.email;
+
+                accountButton.title = "Мой аккаунт";
+                accountButton.setAttribute("aria-label", "Мой аккаунт");
 
             }
 
+        } catch (error) {
+
+            console.error("Ошибка проверки аккаунта:", error);
+
+            authenticated = false;
+
+        }
+    }
+
+    accountButton.addEventListener("click", function () {
+
+        if (!authenticated) {
+            window.location.href = "./account.html";
+            return;
         }
 
-    } catch (error) {
+        if (accountDropdown.hidden) {
+            openAccountMenu();
+        } else {
+            closeAccountMenu();
+        }
 
-        console.error("Ошибка проверки аккаунта:", error);
+    });
 
-    }
+    document.addEventListener("click", function (event) {
+
+        if (!document.getElementById("account").contains(event.target)) {
+            closeAccountMenu();
+        }
+
+    });
+
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+            closeAccountMenu();
+        }
+
+    });
+
+    checkAccount();
 
 });
 </script>
 
 
-<!-- УПРАВЛЕНИЕ МЕНЮ -->
+<!-- УПРАВЛЕНИЕ БОКОВЫМ МЕНЮ -->
 
 <script>
 window.addEventListener("load", function () {
 
     var button = document.getElementById("menuButton");
-
     var menu = document.getElementById("sideMenu");
-
     var close = document.getElementById("closeMenu");
-
     var overlay = document.getElementById("menuOverlay");
 
-
     button.onclick = function () {
-
         menu.style.setProperty("right", "0px", "important");
-
         overlay.style.setProperty("display", "block", "important");
-
     };
-
 
     close.onclick = function () {
-
         menu.style.setProperty("right", "-320px", "important");
-
         overlay.style.setProperty("display", "none", "important");
-
     };
 
-
     overlay.onclick = function () {
-
         menu.style.setProperty("right", "-320px", "important");
-
         overlay.style.setProperty("display", "none", "important");
-
     };
 
 });
