@@ -1480,3 +1480,21 @@ border: 1px solid #202020;
     border-color: #d5a638 !important;
     background: #101010 !important;
 }
+
+
+
+
+
+/* Y-FETISH ЧАТ — ЗОЛОТОЙ ТЕКСТ И РАМКА */
+
+.telegram-chat-button {
+    background: #101010 !important;
+    color: #c58a18 !important;
+    border: 1px solid #d5a638 !important;
+}
+
+.telegram-chat-button:hover {
+    background: #101010 !important;
+    color: #fff2b0 !important;
+    border-color: #d5a638 !important;
+}
