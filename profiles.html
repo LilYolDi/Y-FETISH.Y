@@ -3,17 +3,13 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-
     <meta name="google-site-verification" content="K7ColnisEqWYScJdwRQRGUqWqZsEEwyUCd1faxFB638">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>BDSM знакомства в Украине — анкеты, Госпожа, Раб | Y-FETISH</title>
-
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <meta name="description" content="BDSM знакомства в Украине. Анкеты Госпож, Рабов и людей, ищущих тематические знакомства и общение. Поиск по городам и цели знакомства на Y-FETISH.">
-
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
 
@@ -33,8 +29,6 @@
     <link rel="stylesheet" href="./profiles.css">
 
     <style>
-        /* СЕТКА АНКЕТ */
-
         .profiles {
             display: grid !important;
             grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
@@ -74,8 +68,6 @@
             }
         }
 
-        /* SEO-ТЕКСТ */
-
         .seo-content {
             max-width: 1000px;
             margin: 30px auto 40px;
@@ -95,7 +87,7 @@
             margin: 0 0 15px;
         }
 
-        /* МЕНЮ ПРОФИЛЯ */
+        /* МЕНЮ АВАТАРКИ */
 
         #account {
             position: relative;
@@ -113,7 +105,10 @@
             top: calc(100% + 12px);
             right: 0;
             z-index: 9999;
-            width: 245px;
+            width: 280px;
+            max-width: calc(100vw - 24px);
+            max-height: 75vh;
+            overflow-y: auto;
             padding: 16px;
             box-sizing: border-box;
             background: #171717;
@@ -122,7 +117,8 @@
             box-shadow: 0 8px 28px rgba(0, 0, 0, 0.65);
         }
 
-        .account-dropdown[hidden] {
+        .account-dropdown[hidden],
+        .my-ads-panel[hidden] {
             display: none !important;
         }
 
@@ -138,6 +134,7 @@
         }
 
         .account-menu-link,
+        .account-menu-button,
         .account-menu-logout {
             display: block;
             width: 100%;
@@ -157,15 +154,87 @@
             background: linear-gradient(180deg, #fff2b0, #c58a18);
         }
 
+        .account-menu-button {
+            margin-bottom: 10px;
+            color: #f3d47c;
+            background: #29251b;
+            border: 1px solid #b58a32;
+        }
+
         .account-menu-logout {
+            margin-top: 12px;
             color: #fff;
             background: #292020;
             border: 1px solid #9e3434;
         }
 
         .account-menu-link:hover,
+        .account-menu-button:hover,
         .account-menu-logout:hover {
             filter: brightness(1.12);
+        }
+
+        .my-ads-panel {
+            padding: 10px 0;
+            border-top: 1px solid rgba(220, 180, 75, 0.3);
+            border-bottom: 1px solid rgba(220, 180, 75, 0.3);
+        }
+
+        .my-ads-title {
+            margin: 0 0 10px;
+            color: #f3d47c;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .my-ads-message {
+            margin: 8px 0;
+            color: #ccc;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .my-ad-item {
+            padding: 10px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .my-ad-name {
+            display: block;
+            margin-bottom: 4px;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .my-ad-city {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        .my-ad-delete {
+            width: 100%;
+            padding: 8px;
+            color: #fff;
+            background: #642626;
+            border: 1px solid #a94444;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .my-ad-delete:disabled {
+            opacity: 0.5;
+            cursor: wait;
+        }
+
+        @media (max-width: 400px) {
+            .account-dropdown {
+                right: -5px;
+            }
         }
     </style>
 </head>
@@ -195,24 +264,38 @@
                 </svg>
             </button>
 
-            <div
-                id="accountDropdown"
-                class="account-dropdown"
-                hidden
-            >
+            <div id="accountDropdown" class="account-dropdown" hidden>
+
                 <div id="accountEmail" class="account-email"></div>
 
                 <a href="./publish.html" class="account-menu-link">
-                    Добавить анкету
+                    + Добавить анкету
                 </a>
+
+                <button
+                    id="myAdsToggle"
+                    class="account-menu-button"
+                    type="button"
+                    aria-expanded="false"
+                >
+                    Мои анкеты
+                </button>
+
+                <div id="myAdsPanel" class="my-ads-panel" hidden>
+                    <div class="my-ads-title">Мои опубликованные анкеты</div>
+                    <div id="myAdsList">
+                        <p class="my-ads-message">Загрузка...</p>
+                    </div>
+                </div>
 
                 <button
                     id="logout"
                     class="account-menu-logout"
                     type="button"
                 >
-                    Выйти
+                    Выйти из аккаунта
                 </button>
+
             </div>
 
         </div>
@@ -256,15 +339,10 @@
     </div>
 
     <nav class="menu-links">
-
         <a href="home/index.html">Главная</a>
-
         <a href="./profiles.html">Все анкеты</a>
-
         <a href="./publish.html">Создать анкету</a>
-
         <a href="./ads.html">Создать текстовую анкету</a>
-
     </nav>
 
 </aside>
@@ -274,12 +352,9 @@
 
 <main class="main">
 
-    <!-- ЗАГОЛОВОК -->
-
     <section class="top-section">
 
         <div>
-
             <h1 style="background:linear-gradient(180deg,#fff2b0 0%,#f5d46a 28%,#c58a18 58%,#ffe99a 78%,#a96d08 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">
                 Анкеты
             </h1>
@@ -287,7 +362,6 @@
             <p style="background:linear-gradient(180deg,#fff2b0 0%,#f5d46a 28%,#c58a18 58%,#ffe99a 78%,#a96d08 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">
                 Найдите человека по стране, городу и цели знакомства.
             </p>
-
         </div>
 
         <a href="./publish.html" class="create-button">
@@ -303,7 +377,6 @@
 
         <div class="filter">
             <label for="country">Страна</label>
-
             <select id="country">
                 <option value="all">Все страны</option>
                 <option value="Украина">Украина</option>
@@ -313,7 +386,6 @@
 
         <div class="filter">
             <label for="city">Город</label>
-
             <select id="city">
                 <option value="all">Все города</option>
             </select>
@@ -321,7 +393,6 @@
 
         <div class="filter">
             <label for="goal">Цель знакомства</label>
-
             <select id="goal">
                 <option value="all">Все цели</option>
                 <option value="Госпожа">Госпожа</option>
@@ -335,8 +406,6 @@
 
     </section>
 
-
-    <!-- РЕЗУЛЬТАТЫ -->
 
     <div class="results-header">
 
@@ -371,9 +440,7 @@
             <div class="profile-info">
                 <h3>Москва</h3>
                 <p>Ищу интересных людей для общения и знакомств.</p>
-
-                <button type="button"
-                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
+                <button type="button" onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
                     Купить VIP
                 </button>
             </div>
@@ -390,9 +457,7 @@
             <div class="profile-info">
                 <h3>Санкт-Петербург</h3>
                 <p>Общение, знакомства и новые интересные встречи.</p>
-
-                <button type="button"
-                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
+                <button type="button" onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
                     Купить VIP
                 </button>
             </div>
@@ -409,9 +474,7 @@
             <div class="profile-info">
                 <h3>Киев</h3>
                 <p>Хочу познакомиться с интересными людьми.</p>
-
-                <button type="button"
-                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
+                <button type="button" onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
                     Купить VIP
                 </button>
             </div>
@@ -428,9 +491,7 @@
             <div class="profile-info">
                 <h3>Одесса</h3>
                 <p>Новые знакомства и приятное общение.</p>
-
-                <button type="button"
-                    onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
+                <button type="button" onclick="window.open('tg://resolve?domain=Godelsi', '_blank')">
                     Купить VIP
                 </button>
             </div>
@@ -510,16 +571,10 @@
     </div>
 
 
-    <!-- НЕТ АНКЕТ -->
-
     <section id="empty" class="empty-state hidden">
-
         <div class="empty-icon">◌</div>
-
         <h2>Анкеты не найдены</h2>
-
         <p>Попробуйте изменить параметры поиска.</p>
-
     </section>
 
 </main>
@@ -569,13 +624,8 @@
 <!-- FOOTER -->
 
 <footer class="footer">
-
-    <strong class="logo-gold">
-        Y-FETISH
-    </strong>
-
+    <strong class="logo-gold">Y-FETISH</strong>
     <span>Знакомства и анкеты</span>
-
 </footer>
 
 
@@ -590,8 +640,6 @@
     Y-FETISH Чат
 </a>
 
-
-<!-- JAVASCRIPT -->
 
 <script src="./profiles.js" defer></script>
 
@@ -629,10 +677,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
+    window.reloadPublicAds = loadAds;
+
     function renderAds(list) {
 
         normalProfiles.innerHTML = '';
-
         count.textContent = list.length;
 
         if (list.length === 0) {
@@ -695,7 +744,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                 telegramButton.href = 'https://t.me/' + username;
 
             } else {
-
                 telegramButton.href = '#';
                 telegramButton.textContent = 'Telegram не указан';
                 telegramButton.style.pointerEvents = 'none';
@@ -711,7 +759,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             card.appendChild(info);
 
             normalProfiles.appendChild(card);
-
         });
     }
 
@@ -731,21 +778,16 @@ document.addEventListener('DOMContentLoaded', async function () {
             '<option value="all">Все города</option>';
 
         cities.forEach(function (city) {
-
             const option = document.createElement('option');
-
             option.value = city;
             option.textContent = city;
-
             citySelect.appendChild(option);
-
         });
     }
 
     searchButton.addEventListener('click', function () {
 
         const selectedCity = citySelect.value;
-
         let filtered = ads;
 
         if (selectedCity !== 'all') {
@@ -755,33 +797,34 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         renderAds(filtered);
-
     });
 
     resetButton.addEventListener('click', function () {
-
         citySelect.value = 'all';
-
         renderAds(ads);
-
     });
 
     loadAds();
-
 });
 </script>
 
 
-<!-- ПРОВЕРКА АВТОРИЗАЦИИ И МЕНЮ ПРОФИЛЯ -->
+<!-- МЕНЮ АВАТАРКИ И МОИ АНКЕТЫ -->
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
+    const account = document.getElementById("account");
     const accountButton = document.getElementById("accountButton");
     const accountDropdown = document.getElementById("accountDropdown");
     const accountEmail = document.getElementById("accountEmail");
 
+    const myAdsToggle = document.getElementById("myAdsToggle");
+    const myAdsPanel = document.getElementById("myAdsPanel");
+    const myAdsList = document.getElementById("myAdsList");
+
     let authenticated = false;
+    let myAdsLoaded = false;
 
     function closeAccountMenu() {
         accountDropdown.hidden = true;
@@ -794,9 +837,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     async function checkAccount() {
-
         try {
-
             const response = await fetch("/api/auth/me", {
                 credentials: "same-origin"
             });
@@ -809,22 +850,132 @@ document.addEventListener("DOMContentLoaded", function () {
             const data = await response.json();
 
             if (data.user && data.user.email) {
-
                 authenticated = true;
-
                 accountEmail.textContent = data.user.email;
 
                 accountButton.title = "Мой аккаунт";
                 accountButton.setAttribute("aria-label", "Мой аккаунт");
-
             }
 
         } catch (error) {
-
             console.error("Ошибка проверки аккаунта:", error);
-
             authenticated = false;
+        }
+    }
 
+    async function loadMyAds() {
+
+        myAdsList.innerHTML =
+            '<p class="my-ads-message">Загрузка анкет...</p>';
+
+        try {
+            const response = await fetch("/api/my-ads", {
+                credentials: "same-origin"
+            });
+
+            if (response.status === 401) {
+                myAdsList.innerHTML =
+                    '<p class="my-ads-message">Войдите в аккаунт, чтобы увидеть свои анкеты.</p>';
+                return;
+            }
+
+            if (!response.ok) {
+                throw new Error("Не удалось получить список анкет");
+            }
+
+            const ads = await response.json();
+
+            myAdsList.innerHTML = "";
+            myAdsLoaded = true;
+
+            if (!ads.length) {
+                myAdsList.innerHTML =
+                    '<p class="my-ads-message">У вас пока нет опубликованных анкет.</p>';
+                return;
+            }
+
+            ads.forEach(function (ad) {
+
+                const item = document.createElement("div");
+                item.className = "my-ad-item";
+
+                const name = document.createElement("span");
+                name.className = "my-ad-name";
+                name.textContent = ad.title || "Анкета без названия";
+
+                const city = document.createElement("span");
+                city.className = "my-ad-city";
+                city.textContent = ad.city || "";
+
+                const deleteButton = document.createElement("button");
+                deleteButton.type = "button";
+                deleteButton.className = "my-ad-delete";
+                deleteButton.textContent = "Удалить анкету";
+
+                deleteButton.addEventListener("click", async function () {
+
+                    const confirmed = confirm(
+                        'Удалить анкету "' +
+                        (ad.title || "Без названия") +
+                        '"? Это действие нельзя отменить.'
+                    );
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+                    deleteButton.disabled = true;
+                    deleteButton.textContent = "Удаление...";
+
+                    try {
+                        const deleteResponse = await fetch(
+                            "/api/ads/" + encodeURIComponent(ad.id),
+                            {
+                                method: "DELETE",
+                                credentials: "same-origin"
+                            }
+                        );
+
+                        const result = await deleteResponse.json();
+
+                        if (!deleteResponse.ok) {
+                            throw new Error(
+                                result.error || "Не удалось удалить анкету"
+                            );
+                        }
+
+                        item.remove();
+
+                        if (!myAdsList.querySelector(".my-ad-item")) {
+                            myAdsList.innerHTML =
+                                '<p class="my-ads-message">У вас пока нет опубликованных анкет.</p>';
+                        }
+
+                        if (typeof window.reloadPublicAds === "function") {
+                            window.reloadPublicAds();
+                        }
+
+                    } catch (error) {
+                        alert(error.message);
+                        deleteButton.disabled = false;
+                        deleteButton.textContent = "Удалить анкету";
+                    }
+                });
+
+                item.appendChild(name);
+                item.appendChild(city);
+                item.appendChild(deleteButton);
+
+                myAdsList.appendChild(item);
+            });
+
+        } catch (error) {
+            console.error("Ошибка загрузки своих анкет:", error);
+
+            myAdsList.innerHTML =
+                '<p class="my-ads-message">Ошибка загрузки. Попробуйте ещё раз.</p>';
+
+            myAdsLoaded = false;
         }
     }
 
@@ -840,27 +991,33 @@ document.addEventListener("DOMContentLoaded", function () {
         } else {
             closeAccountMenu();
         }
+    });
 
+    myAdsToggle.addEventListener("click", async function () {
+
+        const willOpen = myAdsPanel.hidden;
+
+        myAdsPanel.hidden = !willOpen;
+        myAdsToggle.setAttribute("aria-expanded", String(willOpen));
+
+        if (willOpen && !myAdsLoaded) {
+            await loadMyAds();
+        }
     });
 
     document.addEventListener("click", function (event) {
-
-        if (!document.getElementById("account").contains(event.target)) {
+        if (!account.contains(event.target)) {
             closeAccountMenu();
         }
-
     });
 
     document.addEventListener("keydown", function (event) {
-
         if (event.key === "Escape") {
             closeAccountMenu();
         }
-
     });
 
     checkAccount();
-
 });
 </script>
 
