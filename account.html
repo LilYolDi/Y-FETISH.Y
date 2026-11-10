@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аккаунт — Y-FETISH.Y</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: #080808;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .account-box {
+            width: 100%;
+            max-width: 390px;
+            padding: 30px 24px;
+            background: #111;
+            border: 1px solid #b88b32;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 25px;
+            font-size: 27px;
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .logo span {
+            color: #d5a638;
+        }
+
+        h2 {
+            margin-bottom: 22px;
+            color: #d5a638;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tabs button {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #b88b32;
+            border-radius: 6px;
+            background: #101010;
+            color: #d5a638;
+            cursor: pointer;
+        }
+
+        .tabs button.active {
+            background: #d5a638;
+            color: #111;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 13px;
+            border: 1px solid #444;
+            border-radius: 6px;
+            background: #080808;
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #d5a638;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            border: 1px solid #d5a638;
+            border-radius: 6px;
+            background: #d5a638;
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        #message {
+            min-height: 20px;
+            margin-top: 16px;
+            font-size: 14px;
+            line-height: 1.5;
+            overflow-wrap: anywhere;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 22px;
+            color: #d5a638;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="account-box">
+
+    <div class="logo">Y-<span>FETISH</span>.Y</div>
+
+    <h2 id="title">Вход в аккаунт</h2>
+
+    <div class="tabs">
+        <button type="button" id="loginTab" class="active">
+            Войти
+        </button>
+
+        <button type="button" id="registerTab">
+            Регистрация
+        </button>
+    </div>
+
+    <form id="accountForm">
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Ваш email"
+            autocomplete="email"
+            required
+        >
+
+        <input
+            type="password"
+            id="password"
+            placeholder="Пароль (минимум 8 символов)"
+            autocomplete="current-password"
+            minlength="8"
+            required
+        >
+
+        <button type="submit" class="submit-button" id="submitButton">
+            Войти
+        </button>
+
+    </form>
+
+    <div id="message" role="status"></div>
+
+    <a href="./index.html" class="back">
+        Вернуться на главную
+    </a>
+
+</div>
+
+<script>
+    const form = document.getElementById("accountForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const message = document.getElementById("message");
+    const title = document.getElementById("title");
+    const submitButton = document.getElementById("submitButton");
+    const loginTab = document.getElementById("loginTab");
+    const registerTab = document.getElementById("registerTab");
+
+    let mode = "login";
+
+    function setMode(newMode) {
+        mode = newMode;
+
+        const registering = mode === "register";
+
+        title.textContent = registering
+            ? "Создание аккаунта"
+            : "Вход в аккаунт";
+
+        submitButton.textContent = registering
+            ? "Зарегистрироваться"
+            : "Войти";
+
+        passwordInput.autocomplete = registering
+            ? "new-password"
+            : "current-password";
+
+        loginTab.classList.toggle("active", !registering);
+        registerTab.classList.toggle("active", registering);
+
+        message.textContent = "";
+    }
+
+    loginTab.addEventListener("click", () => setMode("login"));
+    registerTab.addEventListener("click", () => setMode("register"));
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        message.textContent = "";
+        submitButton.disabled = true;
+
+        try {
+            const response = await fetch(
+                mode === "register"
+                    ? "/api/auth/register"
+                    : "/api/auth/login",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    credentials: "same-origin",
+                    body: JSON.stringify({
+                        email: emailInput.value.trim(),
+                        password: passwordInput.value
+                    })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || "Произошла ошибка.");
+            }
+
+            message.textContent = data.message;
+            message.style.color = "#d5a638";
+
+            if (data.authenticated || mode === "login") {
+                setTimeout(() => {
+                    window.location.href = "./index.html";
+                }, 800);
+            }
+
+        } catch (error) {
+            message.textContent = error.message;
+            message.style.color = "#ff7777";
+        } finally {
+            submitButton.disabled = false;
+        }
+    });
+
+    fetch("/api/auth/me", {
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if (response.ok) {
+            window.location.href = "./index.html";
+        }
+    })
+    .catch(() => {});
+</script>
+
+</body>
+</html>
