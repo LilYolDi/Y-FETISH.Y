@@ -1258,3 +1258,35 @@ border: 1px solid #202020;
     color: #e8bd4f;
     text-shadow: 0 0 10px rgba(230, 180, 55, 0.28);
 }
+
+
+
+
+/* ЗОЛОТЫЕ КНОПКИ ОБЫЧНЫХ АНКЕТ */
+#normalProfiles .profile-info > button {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 15px;
+    border: 1px solid #d5a638;
+    border-radius: 7px;
+    background: linear-gradient(
+        180deg,
+        #fff2b0 0%,
+        #f5d46a 28%,
+        #c58a18 58%,
+        #ffe99a 78%,
+        #a96d08 100%
+    );
+    color: #211707;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(197,138,24,.22);
+    transition: .2s;
+}
+
+#normalProfiles .profile-info > button:hover {
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(230,180,55,.38);
+}
