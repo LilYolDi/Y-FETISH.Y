@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
     const country = document.getElementById("country");
@@ -115,14 +116,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         allCards.forEach(function (card) {
 
-            const cardCountry =
-                card.dataset.country;
-
-            const cardCity =
-                card.dataset.city;
-
-            const cardGoal =
-                card.dataset.goal;
+            const cardCountry = card.dataset.country;
+            const cardCity = card.dataset.city;
+            const cardGoal = card.dataset.goal;
 
 
             const countryMatch =
@@ -179,41 +175,46 @@ document.addEventListener("DOMContentLoaded", function () {
     // КНОПКА НАЙТИ
     // =========================
 
-    searchButton.addEventListener("click", function () {
+    if (searchButton) {
 
-        searchProfiles();
+        searchButton.addEventListener("click", function () {
 
-    });
+            searchProfiles();
+
+        });
+
+    }
 
 
     // =========================
     // СБРОС
     // =========================
 
-    resetButton.addEventListener("click", function () {
+    if (resetButton) {
 
-        country.value = "all";
+        resetButton.addEventListener("click", function () {
 
-        updateCities();
+            country.value = "all";
 
-        city.value = "all";
+            updateCities();
 
-        goal.value = "all";
+            city.value = "all";
 
-        allCards.forEach(function (card) {
+            goal.value = "all";
 
-            card.style.display = "";
+            allCards.forEach(function (card) {
+
+                card.style.display = "";
+
+            });
+
+            count.textContent = allCards.length;
+
+            empty.classList.add("hidden");
 
         });
 
-        count.textContent = allCards.length;
-
-        empty.
-
-
-classList.add("hidden");
-
-    });
+    }
 
 
     // =========================
@@ -235,67 +236,85 @@ classList.add("hidden");
 
     function openMenu() {
 
-        sideMenu.classList.add("active");
+        if (sideMenu) {
+            sideMenu.classList.add("active");
+        }
 
-        menuOverlay.classList.add("active");
+        if (menuOverlay) {
+            menuOverlay.classList.add("active");
+        }
 
     }
 
 
     function closeSideMenu() {
 
-        sideMenu.classList.remove("active");
+        if (sideMenu) {
+            sideMenu.classList.remove("active");
+        }
 
-        menuOverlay.classList.remove("active");
+        if (menuOverlay) {
+            menuOverlay.classList.remove("active");
+        }
 
     }
 
 
     if (menuButton) {
 
-        menuButton.addEventListener(
-            "click",
-            openMenu
-        );
+        menuButton.addEventListener("click", openMenu);
 
     }
 
 
     if (closeMenu) {
 
-        closeMenu.addEventListener(
-            "click",
-            closeSideMenu
-        );
+        closeMenu.addEventListener("click", closeSideMenu);
 
     }
 
 
     if (menuOverlay) {
 
-        menuOverlay.addEventListener(
-            "click",
-            closeSideMenu
-        );
+        menuOverlay.addEventListener("click", closeSideMenu);
 
     }
 
 
     // =========================
-    // ВЫХОД
+    // ВЫХОД ИЗ АККАУНТА
     // =========================
 
-    const logout =
-        document.getElementById("logout");
+    const logout = document.getElementById("logout");
 
     if (logout) {
 
-        logout.addEventListener("click", function () {
+        logout.addEventListener("click", async function () {
 
-            localStorage.removeItem("telegramUser");
+            logout.disabled = true;
 
-            window.location.href =
-                "./index.html";
+            try {
+
+                const response = await fetch("/api/auth/logout", {
+                    method: "POST",
+                    credentials: "same-origin"
+                });
+
+                if (!response.ok) {
+                    throw new Error("Не удалось завершить сессию");
+                }
+
+                window.location.href = "./account.html";
+
+            } catch (error) {
+
+                console.error("Ошибка выхода:", error);
+
+                logout.disabled = false;
+
+                alert("Не удалось выйти из аккаунта. Проверьте подключение к интернету.");
+
+            }
 
         });
 
@@ -311,6 +330,3 @@ classList.add("hidden");
     count.textContent = allCards.length;
 
 });
-
-
-
