@@ -1,3 +1,4 @@
+
 require('dotenv').config();
 
 const express = require('express');
@@ -9,13 +10,12 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'profiles.html'));
 });
 
 app.use(express.static(__dirname));
-
-
 
 app.get('/robots.txt', (req, res) => {
     res.type('text/plain');
@@ -26,8 +26,6 @@ Allow: /
 Sitemap: https://y-fetish-y.onrender.com/sitemap.xml`
     );
 });
-
-
 
 const supabase = createClient(
     'https://cfdopweyymgwcgfynmbx.supabase.co',
@@ -46,6 +44,77 @@ const upload = multer({
     }
 });
 
+// ==========================================
+// АВТОРИЗАЦИЯ И ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ
+// ==========================================
+
+function getCookie(req, name) {
+    const cookies = (req.headers.cookie || "").split(";");
+
+    const cookie = cookies.find(item =>
+        item.trim().startsWith(name + "=")
+    );
+
+    return cookie
+        ? decodeURIComponent(cookie.trim().slice(name.length + 1))
+        : null;
+}
+
+function setAuthCookies(res, session) {
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    };
+
+    res.cookie("yf_auth", session.access_token, options);
+    res.cookie("yf_refresh", session.refresh_token, options);
+}
+
+function clearAuthCookies(res) {
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/"
+    };
+
+    res.clearCookie("yf_auth", options);
+    res.clearCookie("yf_refresh", options);
+}
+
+async function getAuthenticatedUser(req, res) {
+    let accessToken = getCookie(req, "yf_auth");
+    const refreshToken = getCookie(req, "yf_refresh");
+
+    if (!accessToken) {
+        return null;
+    }
+
+    let { data, error } = await supabase.auth.getUser(accessToken);
+
+    if (error && refreshToken) {
+        const refreshed = await supabase.auth.refreshSession({
+            refresh_token: refreshToken
+        });
+
+        if (refreshed.data.session) {
+            setAuthCookies(res, refreshed.data.session);
+            data = refreshed.data;
+            error = null;
+        }
+    }
+
+    if (error || !data.user) {
+        clearAuthCookies(res);
+        return null;
+    }
+
+    return data.user;
+}
+
 // Проверка сервера
 app.get('/api', (req, res) => {
     res.json({
@@ -54,7 +123,11 @@ app.get('/api', (req, res) => {
     });
 });
 
-// Получить объявления
+// ==========================================
+// ОБЪЯВЛЕНИЯ
+// ==========================================
+
+// Получить все опубликованные объявления
 app.get('/api/ads', async (req, res) => {
     try {
         const { data, error } = await supabase
@@ -82,15 +155,60 @@ app.get('/api/ads', async (req, res) => {
     }
 });
 
+// Получить только свои анкеты
+app.get('/api/my-ads', async (req, res) => {
+    try {
+        const user = await getAuthenticatedUser(req, res);
+
+        if (!user) {
+            return res.status(401).json({
+                error: 'Необходимо войти в аккаунт'
+            });
+        }
+
+        const { data, error } = await supabase
+            .from('ads')
+            .select('*')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false });
+
+        if (error) {
+            console.error('Ошибка получения своих анкет:', error);
+
+            return res.status(500).json({
+                error: error.message,
+                code: error.code
+            });
+        }
+
+        res.json(data);
+
+    } catch (error) {
+        console.error('Ошибка /api/my-ads:', error);
+
+        res.status(500).json({
+            error: error.message
+        });
+    }
+});
+
 // Публикация объявления + фото
 app.post('/api/ads', upload.single('photo'), async (req, res) => {
     try {
+        const user = await getAuthenticatedUser(req, res);
+
+        if (!user) {
+            return res.status(401).json({
+                error: 'Для публикации анкеты необходимо войти в аккаунт'
+            });
+        }
+
         const {
-          title,
-          description,
-          city,
-          telegram,
-          channel
+            title,
+            description,
+            city,
+            telegram,
+            channel
         } = req.body;
 
         if (!title || !description || !city) {
@@ -100,16 +218,17 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
         }
 
         let photoUrl = null;
+        let uploadedFileName = null;
 
         // Загружаем фотографию в Supabase Storage
         if (req.file) {
             const extension =
                 path.extname(req.file.originalname) || '.jpg';
 
-           const fileName =
-                       Date.now() + '-' +
-                       Math.random().toString(36).slice(2) +
-                       extension;
+            const fileName =
+                Date.now() + '-' +
+                Math.random().toString(36).slice(2) +
+                extension;
 
             const { error: uploadError } = await supabase
                 .storage
@@ -120,36 +239,35 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
                 });
 
             if (uploadError) {
-                console.error(
-                    'Ошибка загрузки фото:',
-                    uploadError
-                );
+                console.error('Ошибка загрузки фото:', uploadError);
 
                 return res.status(500).json({
                     error: uploadError.message
                 });
             }
 
-            const { data: publicUrlData } =
-                supabase
-                    .storage
-                    .from('ads-photos')
-                    .getPublicUrl(fileName);
+            uploadedFileName = fileName;
+
+            const { data: publicUrlData } = supabase
+                .storage
+                .from('ads-photos')
+                .getPublicUrl(fileName);
 
             photoUrl = publicUrlData.publicUrl;
         }
 
-        // Сохраняем объявление в таблицу ads
+        // Сохраняем объявление с ID владельца
         const { data, error } = await supabase
             .from('ads')
             .insert([
                 {
-                  title: title,
-                  description: description,
-                  city: city,
-                  telegram: telegram,
-                  channel: channel,
-                  photo: photoUrl
+                    title: title,
+                    description: description,
+                    city: city,
+                    telegram: telegram,
+                    channel: channel,
+                    photo: photoUrl,
+                    user_id: user.id
                 }
             ])
             .select()
@@ -157,6 +275,14 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
 
         if (error) {
             console.error('Ошибка Supabase:', error);
+
+            // Удаляем загруженное фото, если запись не сохранилась
+            if (uploadedFileName) {
+                await supabase
+                    .storage
+                    .from('ads-photos')
+                    .remove([uploadedFileName]);
+            }
 
             return res.status(500).json({
                 error: error.message,
@@ -179,7 +305,93 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
     }
 });
 
+// Удалить свою анкету
+app.delete('/api/ads/:id', async (req, res) => {
+    try {
+        const user = await getAuthenticatedUser(req, res);
 
+        if (!user) {
+            return res.status(401).json({
+                error: 'Необходимо войти в аккаунт'
+            });
+        }
+
+        const adId = req.params.id;
+
+        if (!adId) {
+            return res.status(400).json({
+                error: 'Не указан ID анкеты'
+            });
+        }
+
+        // Удаляем только запись, принадлежащую текущему пользователю
+        const { data, error } = await supabase
+            .from('ads')
+            .delete()
+            .eq('id', adId)
+            .eq('user_id', user.id)
+            .select('id, photo')
+            .maybeSingle();
+
+        if (error) {
+            console.error('Ошибка удаления анкеты:', error);
+
+            return res.status(500).json({
+                error: error.message
+            });
+        }
+
+        if (!data) {
+            return res.status(404).json({
+                error: 'Анкета не найдена или не принадлежит вашему аккаунту'
+            });
+        }
+
+        // Удаляем фотографию из Storage
+        if (data.photo) {
+            try {
+                const photoUrl = new URL(data.photo);
+                const marker = '/storage/v1/object/public/ads-photos/';
+
+                const markerIndex = photoUrl.pathname.indexOf(marker);
+
+                if (markerIndex !== -1) {
+                    const fileName = decodeURIComponent(
+                        photoUrl.pathname.slice(markerIndex + marker.length)
+                    );
+
+                    if (fileName && !fileName.includes('..')) {
+                        const { error: photoError } = await supabase
+                            .storage
+                            .from('ads-photos')
+                            .remove([fileName]);
+
+                        if (photoError) {
+                            console.error(
+                                'Не удалось удалить фотографию:',
+                                photoError
+                            );
+                        }
+                    }
+                }
+            } catch (photoError) {
+                console.error('Ошибка обработки фотографии:', photoError);
+            }
+        }
+
+        res.json({
+            success: true,
+            message: 'Анкета удалена'
+        });
+
+    } catch (error) {
+        console.error('Ошибка удаления:', error);
+
+        res.status(500).json({
+            error: error.message
+        });
+    }
+});
 
 // ==========================================
 // ТЕКСТОВЫЕ АНКЕТЫ — ВТОРАЯ СТРАНИЦА
@@ -188,7 +400,6 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
 // Получить текстовые анкеты
 app.get('/api/text-ads', async (req, res) => {
     try {
-
         const { data, error } = await supabaseText
             .from('text_profiles')
             .select('*')
@@ -206,21 +417,17 @@ app.get('/api/text-ads', async (req, res) => {
         res.json(data);
 
     } catch (error) {
-
         console.error('Ошибка:', error);
 
         res.status(500).json({
             error: error.message
         });
-
     }
 });
-
 
 // Создать текстовую анкету
 app.post('/api/text-ads', async (req, res) => {
     try {
-
         const {
             title,
             type,
@@ -273,59 +480,17 @@ app.post('/api/text-ads', async (req, res) => {
         });
 
     } catch (error) {
-
         console.error('Ошибка создания текстовой анкеты:', error);
 
         res.status(500).json({
             error: error.message
         });
-
     }
 });
-
-
-
 
 // ==========================================
 // РЕГИСТРАЦИЯ И ВХОД ПО EMAIL И ПАРОЛЮ
 // ==========================================
-
-function getCookie(req, name) {
-    const cookies = (req.headers.cookie || "").split(";");
-
-    const cookie = cookies.find(item =>
-        item.trim().startsWith(name + "=")
-    );
-
-    return cookie
-        ? decodeURIComponent(cookie.trim().slice(name.length + 1))
-        : null;
-}
-
-function setAuthCookies(res, session) {
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60 * 1000
-    };
-
-    res.cookie("yf_auth", session.access_token, options);
-    res.cookie("yf_refresh", session.refresh_token, options);
-}
-
-function clearAuthCookies(res) {
-    const options = {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/"
-    };
-
-    res.clearCookie("yf_auth", options);
-    res.clearCookie("yf_refresh", options);
-}
 
 // РЕГИСТРАЦИЯ
 app.post("/api/auth/register", async (req, res) => {
@@ -418,34 +583,9 @@ app.post("/api/auth/login", async (req, res) => {
 // ПРОВЕРКА АВТОРИЗАЦИИ
 app.get("/api/auth/me", async (req, res) => {
     try {
-        let accessToken = getCookie(req, "yf_auth");
-        const refreshToken = getCookie(req, "yf_refresh");
+        const user = await getAuthenticatedUser(req, res);
 
-        if (!accessToken) {
-            return res.status(401).json({ user: null });
-        }
-
-        let { data, error } =
-            await supabase.auth.getUser(accessToken);
-
-        // Обновляем истёкшую сессию
-        if (error && refreshToken) {
-            const refreshed =
-                await supabase.auth.refreshSession({
-                    refresh_token: refreshToken
-                });
-
-            if (refreshed.data.session) {
-                setAuthCookies(res, refreshed.data.session);
-
-                data = refreshed.data;
-                error = null;
-            }
-        }
-
-        if (error || !data.user) {
-            clearAuthCookies(res);
-
+        if (!user) {
             return res.status(401).json({
                 user: null
             });
@@ -453,8 +593,8 @@ app.get("/api/auth/me", async (req, res) => {
 
         res.json({
             user: {
-                id: data.user.id,
-                email: data.user.email
+                id: user.id,
+                email: user.email
             }
         });
 
@@ -476,8 +616,9 @@ app.post("/api/auth/logout", (req, res) => {
     });
 });
 
-
-
+// ==========================================
+// ЗАПУСК СЕРВЕРА
+// ==========================================
 
 const PORT = process.env.PORT || 3000;
 
