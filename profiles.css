@@ -1528,18 +1528,26 @@ border: 1px solid #202020;
 
 
 
-/* Кнопки обычных анкет — как «Запросить редактирование» */
-.profile-card .profile-info button,
-.profile-card .profile-info .telegram-button {
+/* ОБЫЧНЫЕ АНКЕТЫ — СТИЛЬ КАК «ЗАПРОСИТЬ РЕДАКТИРОВАНИЕ» */
+#normalProfiles .profile-info > button,
+#normalProfiles .profile-info > a.telegram-button,
+#normalProfiles .profile-info > .telegram-button {
     background: #101010 !important;
     color: #c58a18 !important;
     border: 1px solid #d5a638 !important;
+    border-radius: 6px !important;
     box-shadow: none !important;
+    text-decoration: none !important;
+    transform: none !important;
 }
 
-.profile-card .profile-info button:hover,
-.profile-card .profile-info .telegram-button:hover {
+#normalProfiles .profile-info > button:hover,
+#normalProfiles .profile-info > a.telegram-button:hover,
+#normalProfiles .profile-info > .telegram-button:hover {
     background: #101010 !important;
     color: #fff2b0 !important;
     border-color: #d5a638 !important;
+    box-shadow: none !important;
+    filter: none !important;
+    transform: none !important;
 }
