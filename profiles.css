@@ -1218,7 +1218,9 @@ border: 1px solid #202020;
 
 
 /* ЗОЛОТОЙ ЛОГОТИП Y-FETISH */
-.header .logo-gold {
+.header .logo-gold,
+.site-logo .logo-gold,
+.footer .logo-gold {
     display: inline-block;
     background: linear-gradient(
         180deg,
