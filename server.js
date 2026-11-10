@@ -281,6 +281,200 @@ app.post('/api/text-ads', async (req, res) => {
 
 
 
+
+// ==========================================
+// РЕГИСТРАЦИЯ И ВХОД ПО EMAIL И ПАРОЛЮ
+// ==========================================
+
+function getCookie(req, name) {
+    const cookies = (req.headers.cookie || "").split(";");
+
+    const cookie = cookies.find(item =>
+        item.trim().startsWith(name + "=")
+    );
+
+    return cookie
+        ? decodeURIComponent(cookie.trim().slice(name.length + 1))
+        : null;
+}
+
+function setAuthCookies(res, session) {
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    };
+
+    res.cookie("yf_auth", session.access_token, options);
+    res.cookie("yf_refresh", session.refresh_token, options);
+}
+
+function clearAuthCookies(res) {
+    const options = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/"
+    };
+
+    res.clearCookie("yf_auth", options);
+    res.clearCookie("yf_refresh", options);
+}
+
+// РЕГИСТРАЦИЯ
+app.post("/api/auth/register", async (req, res) => {
+    try {
+        const email = String(req.body.email || "").trim().toLowerCase();
+        const password = String(req.body.password || "");
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            return res.status(400).json({
+                message: "Введите правильный email."
+            });
+        }
+
+        if (password.length < 8) {
+            return res.status(400).json({
+                message: "Пароль должен содержать минимум 8 символов."
+            });
+        }
+
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password
+        });
+
+        if (error) {
+            return res.status(400).json({
+                message: error.message
+            });
+        }
+
+        if (data.session) {
+            setAuthCookies(res, data.session);
+
+            return res.status(201).json({
+                success: true,
+                authenticated: true,
+                message: "Регистрация завершена!"
+            });
+        }
+
+        return res.status(201).json({
+            success: true,
+            authenticated: false,
+            message: "Проверьте почту и подтвердите регистрацию."
+        });
+
+    } catch (error) {
+        console.error("Ошибка регистрации:", error);
+
+        res.status(500).json({
+            message: "Ошибка сервера при регистрации."
+        });
+    }
+});
+
+// ВХОД
+app.post("/api/auth/login", async (req, res) => {
+    try {
+        const email = String(req.body.email || "").trim().toLowerCase();
+        const password = String(req.body.password || "");
+
+        const { data, error } =
+            await supabase.auth.signInWithPassword({
+                email,
+                password
+            });
+
+        if (error || !data.session) {
+            return res.status(401).json({
+                message: "Неверный email или пароль."
+            });
+        }
+
+        setAuthCookies(res, data.session);
+
+        res.json({
+            success: true,
+            message: "Вы успешно вошли."
+        });
+
+    } catch (error) {
+        console.error("Ошибка входа:", error);
+
+        res.status(500).json({
+            message: "Ошибка сервера при входе."
+        });
+    }
+});
+
+// ПРОВЕРКА АВТОРИЗАЦИИ
+app.get("/api/auth/me", async (req, res) => {
+    try {
+        let accessToken = getCookie(req, "yf_auth");
+        const refreshToken = getCookie(req, "yf_refresh");
+
+        if (!accessToken) {
+            return res.status(401).json({ user: null });
+        }
+
+        let { data, error } =
+            await supabase.auth.getUser(accessToken);
+
+        // Обновляем истёкшую сессию
+        if (error && refreshToken) {
+            const refreshed =
+                await supabase.auth.refreshSession({
+                    refresh_token: refreshToken
+                });
+
+            if (refreshed.data.session) {
+                setAuthCookies(res, refreshed.data.session);
+
+                data = refreshed.data;
+                error = null;
+            }
+        }
+
+        if (error || !data.user) {
+            clearAuthCookies(res);
+
+            return res.status(401).json({
+                user: null
+            });
+        }
+
+        res.json({
+            user: {
+                id: data.user.id,
+                email: data.user.email
+            }
+        });
+
+    } catch (error) {
+        console.error("Ошибка проверки аккаунта:", error);
+
+        res.status(500).json({
+            user: null
+        });
+    }
+});
+
+// ВЫХОД
+app.post("/api/auth/logout", (req, res) => {
+    clearAuthCookies(res);
+
+    res.json({
+        success: true
+    });
+});
+
+
+
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, '0.0.0.0', () => {
