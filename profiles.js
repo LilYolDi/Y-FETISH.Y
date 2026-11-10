@@ -42,63 +42,56 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function updateCities() {
 
+        if (!country || !city) return;
+
         const selectedCountry = country.value;
 
         city.innerHTML = `
-            <option value="all">
-                Все города
-            </option>
+            <option value="all">Все города</option>
         `;
+
+        let cityList = [];
 
         if (selectedCountry === "all") {
 
-            const allCities = [
+            cityList = [
                 ...cities["Украина"],
                 ...cities["Россия"]
             ];
 
-            allCities.forEach(function (cityName) {
+        } else if (cities[selectedCountry]) {
 
-                const option = document.createElement("option");
-
-                option.value = cityName;
-                option.textContent = cityName;
-
-                city.appendChild(option);
-
-            });
-
-            return;
-        }
-
-
-        if (cities[selectedCountry]) {
-
-            cities[selectedCountry].forEach(function (cityName) {
-
-                const option = document.createElement("option");
-
-                option.value = cityName;
-                option.textContent = cityName;
-
-                city.appendChild(option);
-
-            });
+            cityList = cities[selectedCountry];
 
         }
+
+        cityList.forEach(function (cityName) {
+
+            const option = document.createElement("option");
+
+            option.value = cityName;
+            option.textContent = cityName;
+
+            city.appendChild(option);
+
+        });
 
     }
 
 
-    // При выборе страны меняем города
+    if (country) {
 
-    country.addEventListener("change", function () {
+        country.addEventListener("change", function () {
 
-        updateCities();
+            updateCities();
 
-        city.value = "all";
+            if (city) {
+                city.value = "all";
+            }
 
-    });
+        });
+
+    }
 
 
     // =========================
@@ -107,12 +100,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function searchProfiles() {
 
+        if (!country || !city || !goal) return;
+
         const selectedCountry = country.value;
         const selectedCity = city.value;
         const selectedGoal = goal.value;
 
         let found = 0;
-
 
         allCards.forEach(function (card) {
 
@@ -120,21 +114,17 @@ document.addEventListener("DOMContentLoaded", function () {
             const cardCity = card.dataset.city;
             const cardGoal = card.dataset.goal;
 
-
             const countryMatch =
                 selectedCountry === "all" ||
                 cardCountry === selectedCountry;
-
 
             const cityMatch =
                 selectedCity === "all" ||
                 cardCity === selectedCity;
 
-
             const goalMatch =
                 selectedGoal === "all" ||
                 cardGoal === selectedGoal;
-
 
             if (
                 countryMatch &&
@@ -143,7 +133,6 @@ document.addEventListener("DOMContentLoaded", function () {
             ) {
 
                 card.style.display = "";
-
                 found++;
 
             } else {
@@ -154,17 +143,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
         });
 
+        if (count) {
+            count.textContent = found;
+        }
 
-        count.textContent = found;
+        if (empty) {
 
-
-        if (found === 0) {
-
-            empty.classList.remove("hidden");
-
-        } else {
-
-            empty.classList.add("hidden");
+            if (found === 0) {
+                empty.classList.remove("hidden");
+            } else {
+                empty.classList.add("hidden");
+            }
 
         }
 
@@ -177,11 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (searchButton) {
 
-        searchButton.addEventListener("click", function () {
-
-            searchProfiles();
-
-        });
+        searchButton.addEventListener("click", searchProfiles);
 
     }
 
@@ -194,23 +179,31 @@ document.addEventListener("DOMContentLoaded", function () {
 
         resetButton.addEventListener("click", function () {
 
-            country.value = "all";
+            if (country) {
+                country.value = "all";
+            }
 
             updateCities();
 
-            city.value = "all";
+            if (city) {
+                city.value = "all";
+            }
 
-            goal.value = "all";
+            if (goal) {
+                goal.value = "all";
+            }
 
             allCards.forEach(function (card) {
-
                 card.style.display = "";
-
             });
 
-            count.textContent = allCards.length;
+            if (count) {
+                count.textContent = allCards.length;
+            }
 
-            empty.classList.add("hidden");
+            if (empty) {
+                empty.classList.add("hidden");
+            }
 
         });
 
@@ -218,21 +211,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     // =========================
-    // МЕНЮ
+    // БОКОВОЕ МЕНЮ
     // =========================
 
-    const menuButton =
-        document.getElementById("menuButton");
-
-    const closeMenu =
-        document.getElementById("closeMenu");
-
-    const sideMenu =
-        document.getElementById("sideMenu");
-
-    const menuOverlay =
-        document.getElementById("menuOverlay");
-
+    const menuButton = document.getElementById("menuButton");
+    const closeMenu = document.getElementById("closeMenu");
+    const sideMenu = document.getElementById("sideMenu");
+    const menuOverlay = document.getElementById("menuOverlay");
 
     function openMenu() {
 
@@ -246,7 +231,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     function closeSideMenu() {
 
         if (sideMenu) {
@@ -259,25 +243,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
     if (menuButton) {
-
         menuButton.addEventListener("click", openMenu);
-
     }
-
 
     if (closeMenu) {
-
         closeMenu.addEventListener("click", closeSideMenu);
-
     }
 
-
     if (menuOverlay) {
-
         menuOverlay.addEventListener("click", closeSideMenu);
-
     }
 
 
@@ -327,6 +302,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     updateCities();
 
-    count.textContent = allCards.length;
+    if (count) {
+        count.textContent = allCards.length;
+    }
 
 });
