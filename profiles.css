@@ -1504,9 +1504,9 @@ border: 1px solid #202020;
 
 
 
-/* КРАСНАЯ ОБВОДКА VIP И ОБЫЧНЫХ АНКЕТ */
+/* КРАСНАЯ ОБВОДКА КНОПОК VIP И ОБЫЧНЫЕ АНКЕТЫ */
 
-#vipProfiles .profile-card,
-#normalProfiles .profile-card {
+#vipProfiles,
+#normalProfiles {
     border: 2px solid #e00000 !important;
 }
