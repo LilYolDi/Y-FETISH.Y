@@ -930,7 +930,19 @@ border: 1px solid #202020;
 
 
 .normal-title {
-    color: #ffffff;
+    background: linear-gradient(
+        180deg,
+        #fff2b0 0%,
+        #f5d46a 28%,
+        #c58a18 58%,
+        #ffe99a 78%,
+        #a96d08 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #e8bd4f;
+    text-shadow: 0 0 10px rgba(230, 180, 55, 0.28);
 }
 
 .profiles {
