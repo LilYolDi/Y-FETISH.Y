@@ -206,15 +206,7 @@
             submitButton.disabled = false;
         }
     });
-    fetch("/api/auth/me", {
-        credentials: "same-origin"
-    })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = "./profiles.html";
-        }
-    })
-    .catch(() => {});
+    
 </script>
 </body>
 </html>
