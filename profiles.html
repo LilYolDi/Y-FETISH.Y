@@ -985,20 +985,27 @@ button.rel = 'noopener noreferrer';
 
 }
 			
+info.appendChild(title);
+info.appendChild(city);
+info.appendChild(description);
+info.appendChild(button);
+info.appendChild(telegramButton);
 
-            info.appendChild(title);
-            info.appendChild(city);
-            info.appendChild(description);
-            info.appendChild(button);
-			info.appendChild(telegramButton);
-            card.appendChild(image);
-            card.appendChild(info);
+const registerButton = document.createElement('a');
+registerButton.href = './account.html';
+registerButton.className = 'telegram-button';
+registerButton.textContent = 'Зарегистрироваться';
 
-            normalProfiles.appendChild(card);
+info.appendChild(registerButton);
 
-        });
+card.appendChild(image);
+card.appendChild(info);
 
-    }
+normalProfiles.appendChild(card);
+
+});
+
+}
 
 
     // Заполняем список городов
