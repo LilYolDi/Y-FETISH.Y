@@ -27,9 +27,27 @@ Sitemap: https://y-fetish-y.onrender.com/sitemap.xml`
     );
 });
 
+const SUPABASE_URL = 'https://cfdopweyymgwcgfynmbx.supabase.co';
+
 const supabase = createClient(
-    'https://cfdopweyymgwcgfynmbx.supabase.co',
+    SUPABASE_URL,
     process.env.SUPABASE_KEY
+);
+
+// Секретный ключ используется только на сервере для операций с ads и Storage.
+if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    throw new Error('Не задан SUPABASE_SERVICE_ROLE_KEY в переменных Render');
+}
+
+const supabaseAdmin = createClient(
+    SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    {
+        auth: {
+            autoRefreshToken: false,
+            persistSession: false
+        }
+    }
 );
 
 const supabaseText = createClient(
@@ -130,7 +148,7 @@ app.get('/api', (req, res) => {
 // Получить все опубликованные объявления
 app.get('/api/ads', async (req, res) => {
     try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('ads')
             .select('*')
             .order('created_at', { ascending: false });
@@ -166,7 +184,7 @@ app.get('/api/my-ads', async (req, res) => {
             });
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('ads')
             .select('*')
             .eq('user_id', user.id)
@@ -230,7 +248,7 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
                 Math.random().toString(36).slice(2) +
                 extension;
 
-            const { error: uploadError } = await supabase
+            const { error: uploadError } = await supabaseAdmin
                 .storage
                 .from('ads-photos')
                 .upload(fileName, req.file.buffer, {
@@ -248,7 +266,7 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
 
             uploadedFileName = fileName;
 
-            const { data: publicUrlData } = supabase
+            const { data: publicUrlData } = supabaseAdmin
                 .storage
                 .from('ads-photos')
                 .getPublicUrl(fileName);
@@ -257,7 +275,7 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
         }
 
         // Сохраняем объявление с ID владельца
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('ads')
             .insert([
                 {
@@ -278,7 +296,7 @@ app.post('/api/ads', upload.single('photo'), async (req, res) => {
 
             // Удаляем загруженное фото, если запись не сохранилась
             if (uploadedFileName) {
-                await supabase
+                await supabaseAdmin
                     .storage
                     .from('ads-photos')
                     .remove([uploadedFileName]);
@@ -325,7 +343,7 @@ app.delete('/api/ads/:id', async (req, res) => {
         }
 
         // Удаляем только запись, принадлежащую текущему пользователю
-        const { data, error } = await supabase
+        const { data, error } = await supabaseAdmin
             .from('ads')
             .delete()
             .eq('id', adId)
@@ -361,7 +379,7 @@ app.delete('/api/ads/:id', async (req, res) => {
                     );
 
                     if (fileName && !fileName.includes('..')) {
-                        const { error: photoError } = await supabase
+                        const { error: photoError } = await supabaseAdmin
                             .storage
                             .from('ads-photos')
                             .remove([fileName]);
