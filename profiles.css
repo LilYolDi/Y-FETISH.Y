@@ -1568,3 +1568,43 @@ border: 1px solid #202020;
     background: #101010 !important;
     box-shadow: none !important;
 }
+
+
+
+
+
+
+
+
+
+/* КРУГЛАЯ КНОПКА АККАУНТА */
+.header #account.account {
+    display: flex !important;
+}
+
+.account-icon-button {
+    width: 43px;
+    height: 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #d5a638;
+    border-radius: 50%;
+    background: #101010;
+    color: #c58a18;
+    text-decoration: none;
+}
+
+.account-icon-button svg {
+    width: 25px;
+    height: 25px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+}
+
+.account-icon-button:hover {
+    color: #fff2b0;
+    border-color: #fff2b0;
+}
