@@ -1498,3 +1498,15 @@ border: 1px solid #202020;
     color: #fff2b0 !important;
     border-color: #d5a638 !important;
 }
+
+
+
+
+
+
+/* КРАСНАЯ ОБВОДКА VIP И ОБЫЧНЫХ АНКЕТ */
+
+#vipProfiles .profile-card,
+#normalProfiles .profile-card {
+    border: 2px solid #e00000 !important;
+}
