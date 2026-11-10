@@ -983,29 +983,22 @@ button.rel = 'noopener noreferrer';
     telegramButton.style.pointerEvents =
         'none';
 
-}
+ }
 			
-info.appendChild(title);
-info.appendChild(city);
-info.appendChild(description);
-info.appendChild(button);
-info.appendChild(telegramButton);
 
-const registerButton = document.createElement('a');
-registerButton.href = './account.html';
-registerButton.className = 'telegram-button';
-registerButton.textContent = 'Зарегистрироваться';
+            info.appendChild(title);
+            info.appendChild(city);
+            info.appendChild(description);
+            info.appendChild(button);
+			info.appendChild(telegramButton);
+            card.appendChild(image);
+            card.appendChild(info);
 
-info.appendChild(registerButton);
+            normalProfiles.appendChild(card);
 
-card.appendChild(image);
-card.appendChild(info);
+        });
 
-normalProfiles.appendChild(card);
-
-});
-
-}
+    }
 
 
     // Заполняем список городов
