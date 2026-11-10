@@ -1446,3 +1446,18 @@ border: 1px solid #202020;
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(230,180,55,.38);
 }
+
+
+
+
+/* ЗОЛОТОЙ ТЕКСТ И ИКОНКА КНОПКИ МЕНЮ */
+
+.menu-button {
+    color: #c58a18 !important;
+    border-color: #d5a638 !important;
+}
+
+.menu-button:hover {
+    color: #fff2b0 !important;
+    border-color: #d5a638 !important;
+}
