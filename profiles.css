@@ -1525,3 +1525,21 @@ border: 1px solid #202020;
     color: #fff2b0 !important;
     border-color: #d5a638 !important;
 }
+
+
+
+/* Кнопки обычных анкет */
+.profile-info button,
+.profile-info .telegram-button {
+    background: #101010 !important;
+    color: #c58a18 !important;
+    border: 1px solid #d5a638 !important;
+    box-shadow: none !important;
+}
+
+.profile-info button:hover,
+.profile-info .telegram-button:hover {
+    background: #101010 !important;
+    color: #fff2b0 !important;
+    border-color: #d5a638 !important;
+}
