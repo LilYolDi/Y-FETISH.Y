@@ -1467,14 +1467,16 @@ border: 1px solid #202020;
 
 
 
-/* ЗОЛОТОЙ ТЕКСТ И РАМКА КНОПКИ ЗАПРОСИТЬ РЕДАКТИРОВАНИЕ */
+/* ЗОЛОТАЯ РАМКА И ТЕКСТ КНОПКИ ЗАПРОСИТЬ РЕДАКТИРОВАНИЕ */
 
-.request-edit-button {
+.header #account .login-button {
     color: #c58a18 !important;
     border: 1px solid #d5a638 !important;
+    background: #101010 !important;
 }
 
-.request-edit-button:hover {
+.header #account .login-button:hover {
     color: #fff2b0 !important;
     border-color: #d5a638 !important;
+    background: #101010 !important;
 }
